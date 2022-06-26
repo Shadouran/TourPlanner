@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TourPlanner.Server.DAL\TourPlanner.Server.DAL.csproj" />
     <ProjectReference Include="..\TourPlanner.Shared\TourPlanner.Shared.csproj" />
   </ItemGroup>
 
