@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TourPlanner.Shared.Log4Net\TourPlanner.Shared.Log4Net.csproj" />
+    <ProjectReference Include="..\TourPlanner.Shared.Models\TourPlanner.Shared.Models.csproj" />
+    <ProjectReference Include="..\TourPlanner.Shared\TourPlanner.Shared.csproj" />
+  </ItemGroup>
+
+</Project>
