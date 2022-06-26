@@ -6,4 +6,13 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Npgsql" Version="6.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TourPlanner.Shared.Log4Net\TourPlanner.Shared.Log4Net.csproj" />
+    <ProjectReference Include="..\TourPlanner.Shared\TourPlanner.Shared.csproj" />
+  </ItemGroup>
+
 </Project>
