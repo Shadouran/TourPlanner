@@ -2,12 +2,13 @@ using Microsoft.AspNetCore.Mvc;
 using TourPlanner.Server.DAL;
 using TourPlanner.Server.DAL.Records;
 
-var configurationBuilder = new ConfigurationBuilder().AddJsonFile("appsettings.json", false, true);
-var configurationRoot = configurationBuilder.Build();
-var databaseConnection = new DatabaseConnection(configurationRoot["ConnectionString"]);
-
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddSingleton<ITourRepository>(provider => new TourRepositoryPostgreSQL(databaseConnection));
+builder.Services.AddSingleton<IConfiguration>((_) =>
+{
+    return new ConfigurationBuilder().AddJsonFile("appsettings.json", false, true).Build();
+});
+builder.Services.AddSingleton<INpgsqlDatabase, NpgsqlDatabase>();
+builder.Services.AddSingleton<ITourRepository, TourRepositoryPostgreSQL>();
 var app = builder.Build();
 
 app.MapGet("/tours", async ([FromServices] ITourRepository tourRepository) =>
@@ -40,4 +41,5 @@ app.MapDelete("/tours/{id}", async ([FromServices] ITourRepository tourRepositor
     return Results.Ok(id);
 });
 
-app.Run("http://localhost:3000");
+var host = $"{app.Services.GetRequiredService<IConfiguration>()["BaseUri"]}:{app.Services.GetRequiredService<IConfiguration>()["Port"]}";
+app.Run(host);
