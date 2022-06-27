@@ -5,11 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TourPlanner.Client"
         xmlns:views="clr-namespace:TourPlanner.Client.Views"
+        xmlns:viewmodels="clr-namespace:TourPlanner.Client.ViewModels"
+        d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
         mc:Ignorable="d"
         Title="TourPlanner" Height="450" Width="800" Loaded="OnLoad">
     <DockPanel>
         <Menu DockPanel.Dock="Top">
-            <MenuItem Header="_File"></MenuItem>
+            <MenuItem Header="_File">
+                <MenuItem Header="_Exit" Command="{Binding CloseCommand}"></MenuItem>
+            </MenuItem>
             <MenuItem Header="_Edit"></MenuItem>
             <MenuItem Header="_Help"></MenuItem>
         </Menu>
@@ -21,7 +25,7 @@
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <views:ListControl Grid.Column="0" Grid.Row="0" Margin="5,10" Padding="2,0"></views:ListControl>
+            <views:TourListView x:Name="TourList"  Grid.Column="0" Grid.Row="0" Margin="5,10" Padding="2,0"/>
             <GridSplitter Grid.Column="0" Width="3" VerticalAlignment="Stretch" HorizontalAlignment="Right"/>
             <TabControl Grid.Column="1" Margin="5,10" Padding="2,0">
                 <TabItem Header="_Description"></TabItem>
