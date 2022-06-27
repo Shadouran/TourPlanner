@@ -14,7 +14,7 @@ namespace TourPlanner.Server.DAL
 
         private readonly NpgsqlConnection _connection;
         private readonly object _databaseLock;
-        public TourRepositoryPostgreSQL(DatabaseConnection database)
+        public TourRepositoryPostgreSQL(INpgsqlDatabase database)
         {
             _connection = database.Connection;
             _databaseLock = database.DatabaseLock;

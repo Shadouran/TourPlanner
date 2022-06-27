@@ -18,9 +18,9 @@ namespace TourPlanner.Client.Views
     /// <summary>
     /// Interaction logic for ListControl.xaml
     /// </summary>
-    public partial class ListControl : UserControl
+    public partial class TourListView : UserControl
     {
-        public ListControl()
+        public TourListView()
         {
             InitializeComponent();
         }

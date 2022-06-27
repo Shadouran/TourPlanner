@@ -1,4 +1,5 @@
-﻿using Npgsql;
+﻿using Microsoft.Extensions.Configuration;
+using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace TourPlanner.Server.DAL
 {
-    public class DatabaseConnection
+    public class NpgsqlDatabase : INpgsqlDatabase
     {
         private readonly object _databaseLock = new();
         public object DatabaseLock { get => _databaseLock;  }
@@ -17,9 +18,9 @@ namespace TourPlanner.Server.DAL
 
         private const string ClearDatabaseQuery = "DROP SCHEMA PUBLIC CASCADE; CREATE SCHEMA PUBLIC;";
 
-        public DatabaseConnection(string? connectionString)
+        public NpgsqlDatabase(IConfiguration configuration)
         {
-            _connection = new NpgsqlConnection(connectionString);
+            _connection = new NpgsqlConnection(configuration.GetConnectionString("Default"));
             _connection.Open();
             ClearDatabase();
         }

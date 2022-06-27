@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="TourPlanner.Client.Views.ListControl"
+﻿<UserControl x:Class="TourPlanner.Client.Views.TourListView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -18,12 +18,16 @@
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <Button Grid.Row="0" Grid.Column="0" MinWidth="50" Margin="1,3,1,3">Add</Button>
-        <Button Grid.Row="0" Grid.Column="1" MinWidth="50" Margin="1,3,1,3">Delete</Button>
+        <Button Grid.Row="0" Grid.Column="1" MinWidth="50" Margin="1,3,1,3" Command="{Binding DeleteItemCommand}">Delete</Button>
         <Button Grid.Row="0" Grid.Column="2" MinWidth="50" Margin="1,3,1,3">Edit</Button>
         <TextBox x:Name="SearchBox" Grid.Row="1" Grid.ColumnSpan="3" Margin="1,0,1,0" VerticalContentAlignment="Center"></TextBox>
-        <ListView Grid.Row="2" Grid.ColumnSpan="3" Margin="1,3,1,3">
+        <ListView Grid.Row="2" Grid.ColumnSpan="3" Margin="1,3,1,3" ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem}">
             <ListView.ItemTemplate>
-                <DataTemplate></DataTemplate>
+                <DataTemplate>
+                    <StackPanel Margin="5">
+                        <TextBlock Text="{Binding Name}" TextWrapping="WrapWithOverflow" FontSize="14"></TextBlock>
+                    </StackPanel>
+                </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
     </Grid>
