@@ -8,13 +8,15 @@
         xmlns:viewmodels="clr-namespace:TourPlanner.Client.ViewModels"
         d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
         mc:Ignorable="d"
-        Title="TourPlanner" Height="450" Width="800" Loaded="OnLoad">
+        Title="TourPlanner" Height="450" Width="800" Loaded="Window_Loaded">
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
                 <MenuItem Header="_Exit" Command="{Binding CloseCommand}"></MenuItem>
             </MenuItem>
-            <MenuItem Header="_Edit"></MenuItem>
+            <MenuItem Header="_Edit">
+                <MenuItem Header="_Add Tour..." Command="{Binding OpenAddTourDialog}"></MenuItem>
+            </MenuItem>
             <MenuItem Header="_Help"></MenuItem>
         </Menu>
         <Grid>

@@ -13,7 +13,7 @@ namespace TourPlanner.Client
             InitializeComponent();
         }
 
-        private void OnLoad(object sender, RoutedEventArgs e)
+        private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             if(DataContext is ICloseWindow cw)
             {

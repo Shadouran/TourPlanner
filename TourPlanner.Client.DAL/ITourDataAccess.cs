@@ -10,9 +10,9 @@ namespace TourPlanner.Client.DAL
     public interface ITourDataAccess
     {
         Task AddTourAsync(Tour tour);
-        Task DeleteTourAsync(Guid id);
+        Task DeleteTourAsync(Guid? id);
         Task EditTourAsync(Tour tour);
         Task<ICollection<Tour>?> GetAllToursAsync();
-        Task<Tour?> GetTourById(Guid id);
+        Task<Tour?> GetTourById(Guid? id);
     }
 }

@@ -17,9 +17,9 @@ namespace TourPlanner.Client.ViewModels
         public event EventHandler<Tour?>? SelectedItemChanged;
         public ObservableCollection<Tour> Items { get; } = new();
 
-        public ICommand AddItemCommand { get; }
+        public ICommand OpenAddTourDialogCommand { get; }
         public ICommand DeleteItemCommand { get; }
-        public ICommand EditItemCommand { get; }
+        public ICommand OpenEditTourDialogCommand { get; }
 
         private Tour? _selectedItem;
         public Tour? SelectedItem
@@ -39,15 +39,14 @@ namespace TourPlanner.Client.ViewModels
 
             SetItems();
 
-            AddItemCommand = new RelayCommand(_ =>
+            OpenAddTourDialogCommand = new RelayCommand(_ =>
             {
-                // TODO
-                throw new NotImplementedException();
+                NavigationService?.NavigateTo<AddTourDialogViewModel>();
             });
 
             DeleteItemCommand = new RelayCommand(async _ =>
             {
-                if(SelectedItem == null)
+                if(SelectedItem == null || SelectedItem.Id == null)
                 {
                     return;
                 }
@@ -55,7 +54,7 @@ namespace TourPlanner.Client.ViewModels
                 Items.Remove(SelectedItem);
             });
 
-            EditItemCommand = new RelayCommand(_ =>
+            OpenEditTourDialogCommand = new RelayCommand(_ =>
             {
                 // TODO
                 throw new NotImplementedException();

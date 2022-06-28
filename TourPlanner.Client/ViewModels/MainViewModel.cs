@@ -13,6 +13,7 @@ namespace TourPlanner.Client.ViewModels
         private readonly ITourManager _tourManager;
         public TourListViewModel TourListViewModel { get; }
         public ICommand CloseCommand { get; set; }
+        public ICommand OpenAddTourDialog { get; set; } 
         public Action? Close { get; set; }
 
         public MainViewModel(ITourManager tourManager, TourListViewModel tourListViewModel)
@@ -23,6 +24,11 @@ namespace TourPlanner.Client.ViewModels
             CloseCommand = new RelayCommand(_ =>
             {
                 Close?.Invoke();
+            });
+
+            OpenAddTourDialog = new RelayCommand(_ =>
+            {
+                NavigationService?.NavigateTo<AddTourDialogViewModel>();
             });
         }
     }

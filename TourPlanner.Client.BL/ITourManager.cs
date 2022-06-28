@@ -11,8 +11,8 @@ namespace TourPlanner.Client.BL
     {
         Task AddTourAsync(Tour tour);
         Task EditTourAsync(Tour tour);
-        Task DeleteTourAsync(Guid id);
+        Task DeleteTourAsync(Guid? id);
         Task<IEnumerable<Tour>?> GetAllTourAsync();
-        Task<Tour?> GetTourAsync(Guid id);
+        Task<Tour?> GetTourAsync(Guid? id);
     }
 }

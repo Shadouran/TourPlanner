@@ -18,10 +18,12 @@ namespace TourPlanner.Client.BL
         }
         public async Task AddTourAsync(Tour tour)
         {
+            tour.Id = Guid.NewGuid();
+            // TODO: Mapquest API calls
             await _tourDataAccess.AddTourAsync(tour);
         }
 
-        public async Task DeleteTourAsync(Guid id)
+        public async Task DeleteTourAsync(Guid? id)
         {
             await _tourDataAccess.DeleteTourAsync(id);
         }
@@ -36,7 +38,7 @@ namespace TourPlanner.Client.BL
             return await _tourDataAccess.GetAllToursAsync();
         }
 
-        public async Task<Tour?> GetTourAsync(Guid id)
+        public async Task<Tour?> GetTourAsync(Guid? id)
         {
             return await _tourDataAccess.GetTourById(id);
         }

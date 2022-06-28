@@ -1,10 +1,12 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
+using TourPlanner.Shared.Logging;
 using TourPlanner.Shared.Models;
 
 namespace TourPlanner.Client.DAL.Endpoint
@@ -12,12 +14,14 @@ namespace TourPlanner.Client.DAL.Endpoint
     public class TourDataAccessEndpoint : ITourDataAccess
     {
         private readonly HttpClient _httpClient;
-        public TourDataAccessEndpoint()
+        private readonly ILogger _logger;
+        public TourDataAccessEndpoint(ILoggerFactory factory)
         {
             _httpClient = new()
             {
                 BaseAddress = new Uri("http://localhost:3000/")
             };
+            _logger = factory.CreateLogger<TourDataAccessEndpoint>();
         }
         public async Task AddTourAsync(Tour tour)
         {
@@ -27,11 +31,11 @@ namespace TourPlanner.Client.DAL.Endpoint
             }
             catch (HttpRequestException e)
             {
-                throw e;
+                _logger.Error(e.Message);
             }
         }
 
-        public async Task DeleteTourAsync(Guid id)
+        public async Task DeleteTourAsync(Guid? id)
         {
             try
             {
@@ -39,7 +43,7 @@ namespace TourPlanner.Client.DAL.Endpoint
             }
             catch (HttpRequestException e)
             {
-                throw e;
+                _logger.Error(e.Message);
             }
         }
 
@@ -51,7 +55,7 @@ namespace TourPlanner.Client.DAL.Endpoint
             }
             catch (HttpRequestException e)
             {
-                throw e;
+                _logger.Error(e.Message);
             }
         }
 
@@ -64,12 +68,13 @@ namespace TourPlanner.Client.DAL.Endpoint
             }
             catch (HttpRequestException e)
             {
-                throw e;
+                _logger.Error(e.Message);
             }
+            return null;
 
         }
 
-        public async Task<Tour?> GetTourById(Guid id)
+        public async Task<Tour?> GetTourById(Guid? id)
         {
             try
             {
@@ -78,8 +83,9 @@ namespace TourPlanner.Client.DAL.Endpoint
             }
             catch (HttpRequestException e)
             {
-                throw e;
+                _logger.Error(e.Message);
             }
+            return null;
         }
     }
 }

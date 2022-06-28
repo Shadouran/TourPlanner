@@ -9,6 +9,7 @@ using TourPlanner.Client.DAL;
 using TourPlanner.Client.DAL.Endpoint;
 using TourPlanner.Client.Navigation;
 using TourPlanner.Client.ViewModels;
+using TourPlanner.Client.Views;
 using TourPlanner.Shared.Log4Net;
 using TourPlanner.Shared.Logging;
 
@@ -25,7 +26,7 @@ namespace TourPlanner.Client.IoCConfiguration
             // Logging Setup
             services.AddSingleton<ILoggerFactory, Log4NetFactory>(s =>
             {
-                return new Log4NetFactory(@"C:\__Technikum\4.Semester\SWEN2\TourPlanner\TourPlanner.Client\log4net.config");
+                return new Log4NetFactory("log4net.config");
             });
 
             // DAL Setup
@@ -38,6 +39,7 @@ namespace TourPlanner.Client.IoCConfiguration
             services.AddSingleton<INavigationService, NavigationService>(s =>
             {
                 var navigationService = new NavigationService(s);
+                navigationService.RegisterNavigation<AddTourDialogViewModel, AddTourDialog>();
                 navigationService.RegisterNavigation<MainViewModel, MainWindow>((viewModel, window) =>
                 {
                     window.TourList.DataContext = viewModel.TourListViewModel;
@@ -47,6 +49,7 @@ namespace TourPlanner.Client.IoCConfiguration
             });
             services.AddTransient<TourListViewModel>();
             services.AddTransient<MainViewModel>();
+            services.AddTransient<AddTourDialogViewModel>();
 
 
             _serviceProvider = services.BuildServiceProvider();
@@ -54,6 +57,7 @@ namespace TourPlanner.Client.IoCConfiguration
 
         public MainViewModel MainViewModel => _serviceProvider.GetRequiredService<MainViewModel>();
         public TourListViewModel TourListViewModel => _serviceProvider.GetRequiredService<TourListViewModel>();
+        public AddTourDialogViewModel AddTourViewModel => _serviceProvider.GetRequiredService<AddTourDialogViewModel>();
         public ILoggerFactory LoggerFactory => _serviceProvider.GetRequiredService<ILoggerFactory>();
         public INavigationService NavigationService => _serviceProvider.GetRequiredService<INavigationService>();
     }
