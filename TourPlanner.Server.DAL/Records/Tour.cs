@@ -6,5 +6,7 @@ using System.Threading.Tasks;
 
 namespace TourPlanner.Server.DAL.Records
 {
-    public record Tour(Guid Id, string Name, string Description, string StartLocation, string TargetLocation, string TransportType, string Distance, string EstimatedTime, string RouteInformation);
+    public record Tour(TourUserInformation TourUserInformation, TourMapquestInformation TourMapquestInformation);
+    public record TourUserInformation(Guid Id, string Name, string Description, string StartLocation, string TargetLocation, string TransportType, string RouteInformation);
+    public record TourMapquestInformation(string Distance, string EstimatedTime);
 }
