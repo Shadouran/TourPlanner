@@ -63,7 +63,7 @@ namespace TourPlanner.Client.DAL.Endpoint
         {
             try
             {
-                var tours = await _httpClient.GetFromJsonAsync<ICollection<Tour>?>("/tours");
+                var tours = await _httpClient.GetFromJsonAsync<ICollection<Tour>>("/tours");
                 return tours;
             }
             catch (HttpRequestException e)
