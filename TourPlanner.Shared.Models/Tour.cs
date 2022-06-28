@@ -8,11 +8,13 @@ namespace TourPlanner.Shared.Models
 {
     public class Tour
     {
+        public Guid? Id { get; set; }
         public TourUserInformation? UserInformation { get; set; }
         public TourMapquestInformation? MapquestInformation { get; set; }
 
-        public Tour(TourUserInformation? userInformation, TourMapquestInformation? mapquestInformation)
+        public Tour(Guid? id, TourUserInformation? userInformation, TourMapquestInformation? mapquestInformation)
         {
+            Id = id;
             UserInformation = userInformation;
             MapquestInformation = mapquestInformation;
         }
@@ -20,7 +22,6 @@ namespace TourPlanner.Shared.Models
 
     public class TourUserInformation
     {
-        public Guid Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string StartLocation { get; set; }
@@ -28,9 +29,8 @@ namespace TourPlanner.Shared.Models
         public string TransportType { get; set; }
         public string RouteInformation { get; set; }
 
-        public TourUserInformation(Guid id, string name, string description, string startLocation, string targetLocation, string transportType, string routeInformation)
+        public TourUserInformation(string name, string description, string startLocation, string targetLocation, string transportType, string routeInformation)
         {
-            Id = id;
             Name = name;
             Description = description;
             StartLocation = startLocation;

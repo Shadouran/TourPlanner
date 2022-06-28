@@ -24,7 +24,7 @@ namespace TourPlanner.Server.DAL
         public void Create(Tour tour)
         {
             using var cmd = new NpgsqlCommand(CreateTourQuery, _connection);
-            cmd.Parameters.AddWithValue("id", tour.TourUserInformation.Id.ToString());
+            cmd.Parameters.AddWithValue("id", tour.Id.ToString());
             cmd.Parameters.AddWithValue("name", tour.TourUserInformation.Name);
             cmd.Parameters.AddWithValue("description", tour.TourUserInformation.Description);
             cmd.Parameters.AddWithValue("startlocation", tour.TourUserInformation.StartLocation);
@@ -42,7 +42,7 @@ namespace TourPlanner.Server.DAL
         public async Task CreateAsync(Tour tour)
         {
             using var cmd = new NpgsqlCommand(CreateTourQuery, _connection);
-            cmd.Parameters.AddWithValue("id", tour.TourUserInformation.Id.ToString());
+            cmd.Parameters.AddWithValue("id", tour.Id.ToString());
             cmd.Parameters.AddWithValue("name", tour.TourUserInformation.Name);
             cmd.Parameters.AddWithValue("description", tour.TourUserInformation.Description);
             cmd.Parameters.AddWithValue("startlocation", tour.TourUserInformation.StartLocation);
@@ -80,16 +80,16 @@ namespace TourPlanner.Server.DAL
                 var reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
-                    var tour = new Tour(
-                        new TourUserInformation(Guid.Parse(reader.GetString(reader.GetOrdinal("id"))),
-                                        reader.GetString(reader.GetOrdinal("name")),
-                                        reader.GetString(reader.GetOrdinal("description")),
-                                        reader.GetString(reader.GetOrdinal("startlocation")),
-                                        reader.GetString(reader.GetOrdinal("targetlocation")),
-                                        reader.GetString(reader.GetOrdinal("transporttype")),
-                                        reader.GetString(reader.GetOrdinal("routeinformation"))),
-                        new TourMapquestInformation(reader.GetString(reader.GetOrdinal("distance")),
-                                        reader.GetString(reader.GetOrdinal("estimatedtime"))));
+                    var tour = new Tour(Guid.Parse(reader.GetString(reader.GetOrdinal("id"))),
+                                        new TourUserInformation(
+                                            reader.GetString(reader.GetOrdinal("name")),
+                                            reader.GetString(reader.GetOrdinal("description")),
+                                            reader.GetString(reader.GetOrdinal("startlocation")),
+                                            reader.GetString(reader.GetOrdinal("targetlocation")),
+                                            reader.GetString(reader.GetOrdinal("transporttype")),
+                                            reader.GetString(reader.GetOrdinal("routeinformation"))),
+                                        new TourMapquestInformation(reader.GetString(reader.GetOrdinal("distance")),
+                                            reader.GetString(reader.GetOrdinal("estimatedtime"))));
                     result.Add(tour);
                 }
                 reader.Close();
@@ -104,15 +104,15 @@ namespace TourPlanner.Server.DAL
             var reader = await cmd.ExecuteReaderAsync();
             while (await reader.ReadAsync())
             {
-                var tour = new Tour(
-                        new TourUserInformation(Guid.Parse(reader.GetString(reader.GetOrdinal("id"))),
+                var tour = new Tour(Guid.Parse(reader.GetString(reader.GetOrdinal("id"))),
+                                    new TourUserInformation(
                                         reader.GetString(reader.GetOrdinal("name")),
                                         reader.GetString(reader.GetOrdinal("description")),
                                         reader.GetString(reader.GetOrdinal("startlocation")),
                                         reader.GetString(reader.GetOrdinal("targetlocation")),
                                         reader.GetString(reader.GetOrdinal("transporttype")),
                                         reader.GetString(reader.GetOrdinal("routeinformation"))),
-                        new TourMapquestInformation(reader.GetString(reader.GetOrdinal("distance")),
+                                    new TourMapquestInformation(reader.GetString(reader.GetOrdinal("distance")),
                                         reader.GetString(reader.GetOrdinal("estimatedtime"))));
                 result.Add(tour);
             }
@@ -130,15 +130,15 @@ namespace TourPlanner.Server.DAL
                 var reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
-                    result = new(
-                        new TourUserInformation(Guid.Parse(reader.GetString(reader.GetOrdinal("id"))),
+                    result = new Tour(Guid.Parse(reader.GetString(reader.GetOrdinal("id"))),
+                                    new TourUserInformation(
                                         reader.GetString(reader.GetOrdinal("name")),
                                         reader.GetString(reader.GetOrdinal("description")),
                                         reader.GetString(reader.GetOrdinal("startlocation")),
                                         reader.GetString(reader.GetOrdinal("targetlocation")),
                                         reader.GetString(reader.GetOrdinal("transporttype")),
                                         reader.GetString(reader.GetOrdinal("routeinformation"))),
-                        new TourMapquestInformation(reader.GetString(reader.GetOrdinal("distance")),
+                                    new TourMapquestInformation(reader.GetString(reader.GetOrdinal("distance")),
                                         reader.GetString(reader.GetOrdinal("estimatedtime"))));
                 }
                 reader.Close();
@@ -154,16 +154,16 @@ namespace TourPlanner.Server.DAL
             var reader = await cmd.ExecuteReaderAsync();
             while (await reader.ReadAsync())
             {
-                result = new(
-                    new TourUserInformation(Guid.Parse(reader.GetString(reader.GetOrdinal("id"))),
-                                        reader.GetString(reader.GetOrdinal("name")),
-                                        reader.GetString(reader.GetOrdinal("description")),
-                                        reader.GetString(reader.GetOrdinal("startlocation")),
-                                        reader.GetString(reader.GetOrdinal("targetlocation")),
-                                        reader.GetString(reader.GetOrdinal("transporttype")),
-                                        reader.GetString(reader.GetOrdinal("routeinformation"))),
-                    new TourMapquestInformation(reader.GetString(reader.GetOrdinal("distance")),
-                                        reader.GetString(reader.GetOrdinal("estimatedtime"))));
+                result = new Tour(Guid.Parse(reader.GetString(reader.GetOrdinal("id"))),
+                                new TourUserInformation(
+                                    reader.GetString(reader.GetOrdinal("name")),
+                                    reader.GetString(reader.GetOrdinal("description")),
+                                    reader.GetString(reader.GetOrdinal("startlocation")),
+                                    reader.GetString(reader.GetOrdinal("targetlocation")),
+                                    reader.GetString(reader.GetOrdinal("transporttype")),
+                                    reader.GetString(reader.GetOrdinal("routeinformation"))),
+                                new TourMapquestInformation(reader.GetString(reader.GetOrdinal("distance")),
+                                    reader.GetString(reader.GetOrdinal("estimatedtime"))));
             }
             await reader.CloseAsync();
             return result;
@@ -172,7 +172,7 @@ namespace TourPlanner.Server.DAL
         public void Update(Tour tour)
         {
             using var cmd = new NpgsqlCommand(UpdateTourQuery, _connection);
-            cmd.Parameters.AddWithValue("id", tour.TourUserInformation.Id.ToString());
+            cmd.Parameters.AddWithValue("id", tour.Id.ToString());
             cmd.Parameters.AddWithValue("name", tour.TourUserInformation.Name);
             cmd.Parameters.AddWithValue("description", tour.TourUserInformation.Description);
             cmd.Parameters.AddWithValue("startlocation", tour.TourUserInformation.StartLocation);
@@ -190,7 +190,7 @@ namespace TourPlanner.Server.DAL
         public async Task UpdateAsync(Tour tour)
         {
             using var cmd = new NpgsqlCommand(UpdateTourQuery, _connection);
-            cmd.Parameters.AddWithValue("id", tour.TourUserInformation.Id.ToString());
+            cmd.Parameters.AddWithValue("id", tour.Id.ToString());
             cmd.Parameters.AddWithValue("name", tour.TourUserInformation.Name);
             cmd.Parameters.AddWithValue("description", tour.TourUserInformation.Description);
             cmd.Parameters.AddWithValue("startlocation", tour.TourUserInformation.StartLocation);

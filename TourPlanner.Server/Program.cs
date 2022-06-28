@@ -26,7 +26,7 @@ app.MapGet("/tours/{id}", async ([FromServices] ITourRepository tourRepository, 
 app.MapPost("/tours", async ([FromServices] ITourRepository tourRepository, Tour tour) =>
 {
     await tourRepository.CreateAsync(tour);
-    return Results.Created($"/tours/{tour.TourUserInformation.Id}", tour);
+    return Results.Created($"/tours/{tour.Id}", tour);
 });
 
 app.MapPut("/tours", async ([FromServices] ITourRepository tourRepository, Tour tour) =>
