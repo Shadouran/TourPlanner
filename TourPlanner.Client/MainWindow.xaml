@@ -15,7 +15,8 @@
                 <MenuItem Header="_Exit" Command="{Binding CloseCommand}"></MenuItem>
             </MenuItem>
             <MenuItem Header="_Edit">
-                <MenuItem Header="_Add Tour..." Command="{Binding OpenAddTourDialog}"></MenuItem>
+                <MenuItem Header="_Add Tour..." Command="{Binding OpenAddTourDialogCommand}"></MenuItem>
+                <MenuItem Header="_Edit Tour..." Command="{Binding OpenEditTourDialogCommand}"></MenuItem>
             </MenuItem>
             <MenuItem Header="_Help"></MenuItem>
         </Menu>
@@ -30,8 +31,12 @@
             <views:TourListView x:Name="TourList"  Grid.Column="0" Grid.Row="0" Margin="5,10" Padding="2,0"/>
             <GridSplitter Grid.Column="0" Width="3" VerticalAlignment="Stretch" HorizontalAlignment="Right"/>
             <TabControl Grid.Column="1" Margin="5,10" Padding="2,0">
-                <TabItem Header="_Description"></TabItem>
-                <TabItem Header="_Route"></TabItem>
+                <TabItem Header="_Description">
+                    <views:TourDescriptionControl></views:TourDescriptionControl>
+                </TabItem>
+                <TabItem Header="_Route">
+                    <views:ImageControl></views:ImageControl>
+                </TabItem>
                 <TabItem Header="_Logs"></TabItem>
             </TabControl>
         </Grid>

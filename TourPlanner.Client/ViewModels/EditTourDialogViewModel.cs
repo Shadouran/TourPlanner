@@ -11,10 +11,10 @@ using TourPlanner.Shared.Models;
 
 namespace TourPlanner.Client.ViewModels
 {
-    internal class AddTourDialogViewModel : BaseViewModel, IDataErrorInfo, ICloseWindow
+    internal class EditTourDialogViewModel : BaseViewModel, IDataErrorInfo, ICloseWindow
     {
         private readonly ITourManager _tourManager;
-        private readonly TourListViewModel _tourListViewModel;
+        private readonly MainViewModel _mainViewModel;
 
         private string? _name;
         public string? Name
@@ -81,26 +81,41 @@ namespace TourPlanner.Client.ViewModels
             }
         }
 
-        public ICommand AddTourCommand { get; set; }
+        public Tour Tour { get; set; }
+
+        public ICommand EditTourCommand { get; set; }
         public ICommand CloseCommand { get; set; }
         public Action? Close { get; set; }
 
-        public AddTourDialogViewModel(ITourManager tourManager, TourListViewModel tourListViewModel)
+        public EditTourDialogViewModel(ITourManager tourManager, MainViewModel mainViewModel, Tour tour)
         {
             _tourManager = tourManager;
-            _tourListViewModel = tourListViewModel;
+            _mainViewModel = mainViewModel;
+            Tour = tour;
+            Name = Tour.Name;
+            Description = Tour.Description;
+            StartLocation = Tour.StartLocation;
+            TargetLocation = Tour.TargetLocation;
+            TransportType = Tour.TransportType;
+            RouteInformation = Tour.RouteInformation;
+
 
             CloseCommand = new RelayCommand(_ =>
             {
                 Close?.Invoke();
             });
 
-            AddTourCommand = new RelayCommand(_ =>
+            EditTourCommand = new RelayCommand(_ =>
             {
                 if (ValidateAll())
                 {
-                    var tour = new Tour(Name, Description, StartLocation, TargetLocation, TransportType, RouteInformation);
-                    _tourManager.AddTourAsync(tour);
+                    Tour.Name = Name;
+                    Tour.Description = Description;
+                    Tour.StartLocation = StartLocation;
+                    Tour.TargetLocation = TargetLocation;
+                    Tour.TransportType = TransportType;
+                    Tour.RouteInformation = RouteInformation;
+                    _tourManager.EditTourAsync(Tour);
                     Close?.Invoke();
                 }
             });

@@ -5,12 +5,12 @@ namespace TourPlanner.Server.DAL
 {
     public class TourRepositoryPostgreSQL : ITourRepository
     {
-        private const string CreateTablesQuery = "CREATE TABLE IF NOT EXISTS tours(id VARCHAR PRIMARY KEY, name VARCHAR, description VARCHAR, startlocation VARCHAR, targetlocation VARCHAR, transporttype VARCHAR, distance VARCHAR, estimatedtime VARCHAR, routeinformation VARCHAR)";
-        private const string CreateTourQuery = "INSERT INTO tours (id, name, description, startlocation, targetlocation, transporttype, distance, estimatedtime, routeinformation) VALUES (@id, @name, @description, @startlocation, @targetlocation, @transporttype, @distance, @estimatedtime, @routeinformation)";
+        private const string CreateTablesQuery = "CREATE TABLE IF NOT EXISTS tours(id VARCHAR PRIMARY KEY, name VARCHAR, description VARCHAR, startlocation VARCHAR, targetlocation VARCHAR, transporttype VARCHAR, distance REAL, estimatedtime NUMERIC, routeinformation VARCHAR, imagefilename VARCHAR)";
+        private const string CreateTourQuery = "INSERT INTO tours (id, name, description, startlocation, targetlocation, transporttype, distance, estimatedtime, routeinformation, imagefilename) VALUES (@id, @name, @description, @startlocation, @targetlocation, @transporttype, @distance, @estimatedtime, @routeinformation, @imagefilename)";
         private const string GetAllToursQuery = "SELECT * FROM tours";
         private const string GetTourByIdQuery = "SELECT * FROM tours WHERE id=@id";
         private const string DeleteTourQuery = "DELETE FROM tours WHERE id=@id";
-        private const string UpdateTourQuery = "UPDATE tours SET name=@name, description=@description, startlocation=@startlocation, targetlocation=@targetlocation, transporttype=@transporttype, distance=@distance, estimatedtime=@estimatedtime, routeinformation=@routeinformation WHERE id=@id";
+        private const string UpdateTourQuery = "UPDATE tours SET name=@name, description=@description, startlocation=@startlocation, targetlocation=@targetlocation, transporttype=@transporttype, distance=@distance, estimatedtime=@estimatedtime, routeinformation=@routeinformation, imagefilename=@imagefilename WHERE id=@id";
 
         private readonly NpgsqlConnection _connection;
         private readonly object _databaseLock;
@@ -33,6 +33,7 @@ namespace TourPlanner.Server.DAL
             cmd.Parameters.AddWithValue("distance", tour.Distance);
             cmd.Parameters.AddWithValue("estimatedtime", tour.EstimatedTime);
             cmd.Parameters.AddWithValue("routeinformation", tour.RouteInformation);
+            cmd.Parameters.AddWithValue("imagefilename", tour.ImageFileName);
             lock (_databaseLock)
             {
                 cmd.ExecuteNonQuery();
@@ -51,6 +52,7 @@ namespace TourPlanner.Server.DAL
             cmd.Parameters.AddWithValue("distance", tour.Distance);
             cmd.Parameters.AddWithValue("estimatedtime", tour.EstimatedTime);
             cmd.Parameters.AddWithValue("routeinformation", tour.RouteInformation);
+            cmd.Parameters.AddWithValue("imagefilename", tour.ImageFileName);
             await cmd.ExecuteNonQueryAsync();
         }
 
@@ -87,8 +89,9 @@ namespace TourPlanner.Server.DAL
                                             reader.GetString(reader.GetOrdinal("targetlocation")),
                                             reader.GetString(reader.GetOrdinal("transporttype")),
                                             reader.GetString(reader.GetOrdinal("routeinformation")),
-                                            reader.GetString(reader.GetOrdinal("distance")),
-                                            reader.GetString(reader.GetOrdinal("estimatedtime")));
+                                            reader.GetFloat(reader.GetOrdinal("distance")),
+                                            reader.GetInt32(reader.GetOrdinal("estimatedtime")),
+                                            Guid.Parse(reader.GetString(reader.GetOrdinal("imagefilename"))));
                     result.Add(tour);
                 }
                 reader.Close();
@@ -110,8 +113,9 @@ namespace TourPlanner.Server.DAL
                                             reader.GetString(reader.GetOrdinal("targetlocation")),
                                             reader.GetString(reader.GetOrdinal("transporttype")),
                                             reader.GetString(reader.GetOrdinal("routeinformation")),
-                                            reader.GetString(reader.GetOrdinal("distance")),
-                                            reader.GetString(reader.GetOrdinal("estimatedtime")));
+                                            reader.GetFloat(reader.GetOrdinal("distance")),
+                                            reader.GetInt32(reader.GetOrdinal("estimatedtime")),
+                                            Guid.Parse(reader.GetString(reader.GetOrdinal("imagefilename"))));
                 result.Add(tour);
             }
             await reader.CloseAsync();
@@ -135,8 +139,9 @@ namespace TourPlanner.Server.DAL
                                             reader.GetString(reader.GetOrdinal("targetlocation")),
                                             reader.GetString(reader.GetOrdinal("transporttype")),
                                             reader.GetString(reader.GetOrdinal("routeinformation")),
-                                            reader.GetString(reader.GetOrdinal("distance")),
-                                            reader.GetString(reader.GetOrdinal("estimatedtime")));
+                                            reader.GetFloat(reader.GetOrdinal("distance")),
+                                            reader.GetInt32(reader.GetOrdinal("estimatedtime")),
+                                            Guid.Parse(reader.GetString(reader.GetOrdinal("imagefilename"))));
                 }
                 reader.Close();
             }
@@ -158,8 +163,9 @@ namespace TourPlanner.Server.DAL
                                             reader.GetString(reader.GetOrdinal("targetlocation")),
                                             reader.GetString(reader.GetOrdinal("transporttype")),
                                             reader.GetString(reader.GetOrdinal("routeinformation")),
-                                            reader.GetString(reader.GetOrdinal("distance")),
-                                            reader.GetString(reader.GetOrdinal("estimatedtime")));
+                                            reader.GetFloat(reader.GetOrdinal("distance")),
+                                            reader.GetInt32(reader.GetOrdinal("estimatedtime")),
+                                            Guid.Parse(reader.GetString(reader.GetOrdinal("imagefilename"))));
             }
             await reader.CloseAsync();
             return result;
@@ -177,6 +183,7 @@ namespace TourPlanner.Server.DAL
             cmd.Parameters.AddWithValue("distance", tour.Distance);
             cmd.Parameters.AddWithValue("estimatedtime", tour.EstimatedTime);
             cmd.Parameters.AddWithValue("routeinformation", tour.RouteInformation);
+            cmd.Parameters.AddWithValue("imagefilename", tour.ImageFileName);
             lock (_databaseLock)
             {
                 cmd.ExecuteNonQuery();
@@ -195,6 +202,7 @@ namespace TourPlanner.Server.DAL
             cmd.Parameters.AddWithValue("distance", tour.Distance);
             cmd.Parameters.AddWithValue("estimatedtime", tour.EstimatedTime);
             cmd.Parameters.AddWithValue("routeinformation", tour.RouteInformation);
+            cmd.Parameters.AddWithValue("imagefilename", tour.ImageFileName);
             await cmd.ExecuteNonQueryAsync();
         }
 

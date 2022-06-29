@@ -15,8 +15,9 @@ namespace TourPlanner.Shared.Models
         public string TargetLocation { get; set; }
         public string TransportType { get; set; }
         public string RouteInformation { get; set; }
-        public string? Distance { get; set; }
-        public string? EstimatedTime { get; set; }
+        public float? Distance { get; set; }
+        public int? EstimatedTime { get; set; }
+        public Guid? ImageFileName { get; set; }
 
         public Tour(string name, string description, string startLocation, string targetLocation, string transportType, string routeInformation)
         {

@@ -7,9 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TourPlanner.Shared.Log4Net\TourPlanner.Shared.Log4Net.csproj" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
+    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\TourPlanner.Shared.Models\TourPlanner.Shared.Models.csproj" />
-    <ProjectReference Include="..\TourPlanner.Shared\TourPlanner.Shared.csproj" />
   </ItemGroup>
 
 </Project>

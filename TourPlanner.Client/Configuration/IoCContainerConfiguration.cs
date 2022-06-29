@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TourPlanner.Client.BL;
+using TourPlanner.Client.BL.MapQuest;
 using TourPlanner.Client.DAL;
 using TourPlanner.Client.DAL.Endpoint;
 using TourPlanner.Client.Navigation;
@@ -29,10 +31,20 @@ namespace TourPlanner.Client.IoCConfiguration
                 return new Log4NetFactory("log4net.config");
             });
 
+            // Configuration Setup
+            services.AddSingleton<IConfiguration>(s =>
+            {
+                return new ConfigurationBuilder()
+                            .AddJsonFile("appsettings.json", false, true)
+                            .Build();
+            });
+
             // DAL Setup
+            services.AddSingleton<IFilesystem, Filesystem>();
             services.AddSingleton<ITourDataAccess, TourDataAccessEndpoint>();
 
             // BL Setup
+            services.AddSingleton<IMapAPI, MapQuestAPI>();
             services.AddSingleton<ITourManager, TourManager>();
 
             // UI Setup
@@ -40,6 +52,7 @@ namespace TourPlanner.Client.IoCConfiguration
             {
                 var navigationService = new NavigationService(s);
                 navigationService.RegisterNavigation<AddTourDialogViewModel, AddTourDialog>();
+                navigationService.RegisterNavigation<EditTourDialogViewModel, EditTourDialog>();
                 navigationService.RegisterNavigation<MainViewModel, MainWindow>((viewModel, window) =>
                 {
                     window.TourList.DataContext = viewModel.TourListViewModel;
@@ -48,8 +61,9 @@ namespace TourPlanner.Client.IoCConfiguration
                 return navigationService;
             });
             services.AddTransient<TourListViewModel>();
-            services.AddTransient<MainViewModel>();
             services.AddTransient<AddTourDialogViewModel>();
+            services.AddTransient<EditTourDialogViewModel>();
+            services.AddTransient<MainViewModel>();
 
 
             _serviceProvider = services.BuildServiceProvider();
@@ -57,7 +71,8 @@ namespace TourPlanner.Client.IoCConfiguration
 
         public MainViewModel MainViewModel => _serviceProvider.GetRequiredService<MainViewModel>();
         public TourListViewModel TourListViewModel => _serviceProvider.GetRequiredService<TourListViewModel>();
-        public AddTourDialogViewModel AddTourViewModel => _serviceProvider.GetRequiredService<AddTourDialogViewModel>();
+        public AddTourDialogViewModel AddTourDialogViewModel => _serviceProvider.GetRequiredService<AddTourDialogViewModel>();
+        public EditTourDialogViewModel EditTourDialogViewModel => _serviceProvider.GetRequiredService<EditTourDialogViewModel>();
         public ILoggerFactory LoggerFactory => _serviceProvider.GetRequiredService<ILoggerFactory>();
         public INavigationService NavigationService => _serviceProvider.GetRequiredService<INavigationService>();
     }

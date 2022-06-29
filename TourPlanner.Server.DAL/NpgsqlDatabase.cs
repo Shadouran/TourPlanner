@@ -22,7 +22,7 @@ namespace TourPlanner.Server.DAL
         {
             _connection = new NpgsqlConnection(configuration.GetConnectionString("Default"));
             _connection.Open();
-            //ClearDatabase();
+            ClearDatabase();
         }
 
         private void ClearDatabase()

@@ -4,7 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TourPlanner.Client.Views"
-             mc:Ignorable="d" 
+             xmlns:viewmodels="clr-namespace:TourPlanner.Client.ViewModels"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type=viewmodels:TourListViewModel}"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -18,9 +20,10 @@
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <Button Grid.Row="0" Grid.Column="0" MinWidth="50" Margin="1,3,1,3" Command="{Binding OpenAddTourDialogCommand}">Add</Button>
-        <Button Grid.Row="0" Grid.Column="1" MinWidth="50" Margin="1,3,1,3" Command="{Binding DeleteItemCommand}">Delete</Button>
-        <Button Grid.Row="0" Grid.Column="2" MinWidth="50" Margin="1,3,1,3">Edit</Button>
-        <TextBox x:Name="SearchBox" Grid.Row="1" Grid.ColumnSpan="3" Margin="1,0,1,0" VerticalContentAlignment="Center"></TextBox>
+        <Button Grid.Row="0" Grid.Column="1" MinWidth="50" Margin="1,3,1,3" Command="{Binding OpenEditTourDialogCommand}">Edit</Button>
+        <Button Grid.Row="0" Grid.Column="2" MinWidth="50" Margin="1,3,1,3" Command="{Binding DeleteItemCommand}">Delete</Button>
+        <TextBox x:Name="SearchBox" Grid.Row="1" Grid.ColumnSpan="2" Margin="1,0,1,0" VerticalContentAlignment="Center" Text="{Binding SearchText}"></TextBox>
+        <Button Grid.Row="1" Grid.Column="2" MinWidth="50" Margin="1,3,1,3" Command="{Binding SearchCommand}">Search</Button>
         <ListView Grid.Row="2" Grid.ColumnSpan="3" Margin="1,3,1,3" ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem}">
             <ListView.ItemTemplate>
                 <DataTemplate>

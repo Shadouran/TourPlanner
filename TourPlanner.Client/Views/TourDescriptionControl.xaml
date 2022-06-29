@@ -1,0 +1,44 @@
+﻿<UserControl x:Class="TourPlanner.Client.Views.TourDescriptionControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TourPlanner.Client.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.Resources>
+            <Style TargetType="Label">
+                <Setter Property="Margin" Value="5"></Setter>
+            </Style>
+        </Grid.Resources>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" MinHeight="70"></RowDefinition>
+            <RowDefinition Height="Auto" MinHeight="70"></RowDefinition>
+            <RowDefinition Height="Auto" MinHeight="70"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0" Grid.Column="0">Name: </Label>
+        <TextBlock Name="name" Grid.Row="0" Grid.Column="1"></TextBlock>
+        <Label Grid.Row="1" Grid.Column="0">From: </Label>
+        <TextBlock Name="from" Grid.Row="1" Grid.Column="1"></TextBlock>
+        <Label Grid.Row="2" Grid.Column="0">To: </Label>
+        <TextBlock Name="to" Grid.Row="2" Grid.Column="1"></TextBlock>
+        <Label Grid.Row="0" Grid.Column="2">Distance: </Label>
+        <TextBlock Name="distance" Grid.Row="0" Grid.Column="3"></TextBlock>
+        <Label Grid.Row="1" Grid.Column="2">Transport Type: </Label>
+        <TextBlock Name="transportType" Grid.Row="1" Grid.Column="3"></TextBlock>
+        <Label Grid.Row="2" Grid.Column="2">Estimated Time: </Label>
+        <TextBlock Name="estimatedTime" Grid.Row="2" Grid.Column="3"></TextBlock>
+        <Label Grid.Row="3" Grid.Column="0">Description: </Label>
+        <TextBlock Name="description" Grid.Row="3" Grid.Column="1"></TextBlock>
+        <Label Grid.Row="3" Grid.Column="2">Route Information: </Label>
+        <TextBlock Name="routeInformation" Grid.Row="3" Grid.Column="3"></TextBlock>
+    </Grid>
+</UserControl>

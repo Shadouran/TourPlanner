@@ -15,11 +15,13 @@ namespace TourPlanner.Client.ViewModels
         private readonly ITourManager _tourManager;
 
         public event EventHandler<Tour?>? SelectedItemChanged;
+        public event EventHandler<string?>? SearchTextChanged;
         public ObservableCollection<Tour> Items { get; } = new();
 
-        public ICommand OpenAddTourDialogCommand { get; }
-        public ICommand DeleteItemCommand { get; }
-        public ICommand OpenEditTourDialogCommand { get; }
+        public ICommand? OpenAddTourDialogCommand { get; set; }
+        public ICommand? OpenEditTourDialogCommand { get; set; }
+        public ICommand DeleteItemCommand { get; set; }
+        public ICommand SearchCommand { get; set; }
 
         private Tour? _selectedItem;
         public Tour? SelectedItem
@@ -33,37 +35,37 @@ namespace TourPlanner.Client.ViewModels
             }
         }
 
+        private string? _searchText;
+        public string? SearchText
+        {
+            get => _searchText;
+            set
+            {
+                _searchText = value;
+                OnPropertyChanged();
+            }
+        }
+
         public TourListViewModel(ITourManager tourManager)
         {
             _tourManager = tourManager;
 
-            SetItems();
-
-            OpenAddTourDialogCommand = new RelayCommand(_ =>
-            {
-                NavigationService?.NavigateTo<AddTourDialogViewModel>();
-            });
-
             DeleteItemCommand = new RelayCommand(async _ =>
             {
-                if(SelectedItem == null || SelectedItem.Id == null)
-                {
-                    return;
-                }
                 await _tourManager.DeleteTourAsync(SelectedItem.Id);
-                Items.Remove(SelectedItem);
-            });
+                SearchTextChanged?.Invoke(this, SearchText);
+            }, _ => SelectedItem != null);
 
-            OpenEditTourDialogCommand = new RelayCommand(_ =>
+            SearchCommand = new RelayCommand(_ =>
             {
-                // TODO
-                throw new NotImplementedException();
+                SearchTextChanged?.Invoke(this, SearchText);
             });
         }
 
-        private async void SetItems()
+        public void SetItems(IEnumerable<Tour>? tours)
         {
-            var tours = await _tourManager.GetAllTourAsync();
+            if (tours == null)
+                return;
             Items.Clear();
             tours?.ToList().ForEach(e => Items.Add(e));
         }
