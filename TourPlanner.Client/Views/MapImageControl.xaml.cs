@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace TourPlanner.Client.Views
 {
     /// <summary>
-    /// Interaction logic for ImageControl.xaml
+    /// Interaction logic for MapImageControl.xaml
     /// </summary>
-    public partial class ImageControl : UserControl
+    public partial class MapImageControl : UserControl
     {
-        public ImageControl()
+        public MapImageControl()
         {
             InitializeComponent();
         }

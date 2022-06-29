@@ -13,15 +13,19 @@ namespace TourPlanner.Client.ViewModels
     {
         private readonly ITourManager _tourManager;
         public TourListViewModel TourListViewModel { get; }
+        public TourDescriptionViewModel TourDescriptionViewModel { get; }
+        public MapImageViewModel MapImageViewModel { get; }
         public ICommand CloseCommand { get; set; }
         public ICommand OpenAddTourDialogCommand { get; set; }
         public ICommand OpenEditTourDialogCommand { get; set; }
         public Action? Close { get; set; }
 
-        public MainViewModel(ITourManager tourManager, TourListViewModel tourListViewModel)
+        public MainViewModel(ITourManager tourManager, TourListViewModel tourListViewModel, TourDescriptionViewModel tourDescriptionViewModel, MapImageViewModel mapImageViewModel)
         {
             _tourManager = tourManager;
             TourListViewModel = tourListViewModel;
+            TourDescriptionViewModel = tourDescriptionViewModel;
+            MapImageViewModel = mapImageViewModel;
             SearchTours(null);
 
             CloseCommand = new RelayCommand(_ =>
@@ -48,11 +52,16 @@ namespace TourPlanner.Client.ViewModels
                 SearchTours(searchText);
             };
 
+            TourListViewModel.SelectedItemChanged += (_, selectedItem) =>
+            {
+                LoadTour(selectedItem);
+            };
+
             TourListViewModel.OpenAddTourDialogCommand = OpenAddTourDialogCommand;
             TourListViewModel.OpenEditTourDialogCommand = OpenEditTourDialogCommand;
         }
 
-        public async void SearchTours(string? searchText)
+        private async void SearchTours(string? searchText)
         {
             IEnumerable<Tour>? tours;
             if (string.IsNullOrEmpty(searchText))
@@ -66,6 +75,15 @@ namespace TourPlanner.Client.ViewModels
                 tours = await _tourManager.GetAllTourAsync();
             }
             TourListViewModel.SetItems(tours);
+        }
+
+        private void LoadTour(Tour tour)
+        {
+            if (tour == null)
+                return;
+            //TourDescriptionViewModel.LoadItem(tour);
+            var imageUri = _tourManager.GetFullImagePath(tour.ImageFileName);
+            MapImageViewModel.ImagePath = imageUri;
         }
     }
 }

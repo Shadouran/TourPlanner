@@ -75,5 +75,12 @@ namespace TourPlanner.Client.BL
         {
             return await _tourDataAccess.GetTourById(id);
         }
+
+        public Uri GetFullImagePath(Guid? id)
+        {
+            var imagePath = Path.Combine(_filesystem.FilesystemPath, Path.ChangeExtension(id.ToString(), "jpeg"));
+            var uri = new Uri(imagePath, UriKind.Absolute);
+            return uri;
+        }
     }
 }

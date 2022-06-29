@@ -56,11 +56,14 @@ namespace TourPlanner.Client.IoCConfiguration
                 navigationService.RegisterNavigation<MainViewModel, MainWindow>((viewModel, window) =>
                 {
                     window.TourList.DataContext = viewModel.TourListViewModel;
+                    window.MapImage.DataContext = viewModel.MapImageViewModel;
                 });
 
                 return navigationService;
             });
             services.AddTransient<TourListViewModel>();
+            services.AddTransient<TourDescriptionViewModel>();
+            services.AddTransient<MapImageViewModel>();
             services.AddTransient<AddTourDialogViewModel>();
             services.AddTransient<EditTourDialogViewModel>();
             services.AddTransient<MainViewModel>();
@@ -71,6 +74,8 @@ namespace TourPlanner.Client.IoCConfiguration
 
         public MainViewModel MainViewModel => _serviceProvider.GetRequiredService<MainViewModel>();
         public TourListViewModel TourListViewModel => _serviceProvider.GetRequiredService<TourListViewModel>();
+        public TourDescriptionViewModel TourDescriptionViewModel => _serviceProvider.GetRequiredService<TourDescriptionViewModel>();
+        public MapImageViewModel MapImageViewModel => _serviceProvider.GetRequiredService<MapImageViewModel>();
         public AddTourDialogViewModel AddTourDialogViewModel => _serviceProvider.GetRequiredService<AddTourDialogViewModel>();
         public EditTourDialogViewModel EditTourDialogViewModel => _serviceProvider.GetRequiredService<EditTourDialogViewModel>();
         public ILoggerFactory LoggerFactory => _serviceProvider.GetRequiredService<ILoggerFactory>();

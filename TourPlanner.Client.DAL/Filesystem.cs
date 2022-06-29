@@ -12,11 +12,23 @@ namespace TourPlanner.Client.DAL
     public class Filesystem : IFilesystem
     {
         private readonly string _path;
+        public string FilesystemPath => _path;
 
         public Filesystem(IConfiguration configuration)
         {
             _path = configuration["imageDirectory"];
         }
+
+        public Image? LoadImage(Guid? id)
+        {
+            if (id == null)
+                return null;
+            var path = Path.Combine(_path, id.ToString());
+            if (!File.Exists(path))
+                return null;
+            return Image.FromFile(path);
+        }
+
         public Guid SaveImage(byte[] bytes)
         {
             using var memoryStream = new MemoryStream(bytes);

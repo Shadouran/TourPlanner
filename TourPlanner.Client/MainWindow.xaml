@@ -35,7 +35,7 @@
                     <views:TourDescriptionControl></views:TourDescriptionControl>
                 </TabItem>
                 <TabItem Header="_Route">
-                    <views:ImageControl></views:ImageControl>
+                    <views:MapImageControl x:Name="MapImage"></views:MapImageControl>
                 </TabItem>
                 <TabItem Header="_Logs"></TabItem>
             </TabControl>
