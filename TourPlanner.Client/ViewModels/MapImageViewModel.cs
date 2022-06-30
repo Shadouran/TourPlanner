@@ -14,10 +14,15 @@ namespace TourPlanner.Client.ViewModels
 {
     internal class MapImageViewModel : BaseViewModel
     {
-        public Uri? ImagePath { get; set; }
+        public ImageSource? ImagePath { get; set; }
         public MapImageViewModel()
         {
 
+        }
+
+        public void LoadImage(Uri imageUri)
+        {
+            ImagePath = new BitmapImage(imageUri);
         }
     }
 }

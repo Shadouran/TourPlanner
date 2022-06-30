@@ -13,7 +13,7 @@ namespace TourPlanner.Client.BL
         Task AddTourAsync(Tour tour);
         Task EditTourAsync(Tour tour);
         Task DeleteTourAsync(Guid? id);
-        Task<IEnumerable<Tour>?> GetAllTourAsync();
+        Task<IEnumerable<Tour>?> GetAllToursAsync();
         Task<Tour?> GetTourAsync(Guid? id);
 
         Uri GetFullImagePath(Guid? id);

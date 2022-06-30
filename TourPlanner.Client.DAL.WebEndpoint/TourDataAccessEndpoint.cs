@@ -15,11 +15,12 @@ namespace TourPlanner.Client.DAL.Endpoint
     {
         private readonly HttpClient _httpClient;
         private readonly ILogger _logger;
-        public TourDataAccessEndpoint(ILoggerFactory factory)
+        public TourDataAccessEndpoint(ILoggerFactory factory, IConfiguration configuration)
         {
+            var section = configuration.GetRequiredSection("Endpoints");
             _httpClient = new()
             {
-                BaseAddress = new Uri("http://localhost:3000/")
+                BaseAddress = new Uri($"{section["baseAddress"]}:{section["port"]}")
             };
             _logger = factory.CreateLogger<TourDataAccessEndpoint>();
         }

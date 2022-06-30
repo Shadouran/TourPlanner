@@ -34,7 +34,8 @@ namespace TourPlanner.Client.BL
         public async Task AddTourAsync(Tour tour)
         {
             tour.Id = Guid.NewGuid();
-
+            // TODO: 30.06.22
+            // switch mapquest fetching to server side
             var uriBuilder = new MapQuestUriBuilder(_apiKey);
             uriBuilder.Direction(tour.StartLocation, tour.TargetLocation);
             var uri = uriBuilder.Build();
@@ -66,7 +67,7 @@ namespace TourPlanner.Client.BL
             await _tourDataAccess.EditTourAsync(tour);
         }
 
-        public async Task<IEnumerable<Tour>?> GetAllTourAsync()
+        public async Task<IEnumerable<Tour>?> GetAllToursAsync()
         {
             return await _tourDataAccess.GetAllToursAsync();
         }

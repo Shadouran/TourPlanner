@@ -63,16 +63,16 @@ namespace TourPlanner.Client.ViewModels
 
         private async void SearchTours(string? searchText)
         {
-            IEnumerable<Tour>? tours;
+            IEnumerable<Tour>? tours = null;
             if (string.IsNullOrEmpty(searchText))
             {
-                tours = await _tourManager.GetAllTourAsync();
+                tours = await _tourManager.GetAllToursAsync();
             }
             else
             {
                 // TODO implement getmatchingtours
                 //tours = await _tourManager.GetMatchingToursAsync(searchString);
-                tours = await _tourManager.GetAllTourAsync();
+                tours = await _tourManager.GetAllToursAsync();
             }
             TourListViewModel.SetItems(tours);
         }
@@ -82,8 +82,7 @@ namespace TourPlanner.Client.ViewModels
             if (tour == null)
                 return;
             //TourDescriptionViewModel.LoadItem(tour);
-            var imageUri = _tourManager.GetFullImagePath(tour.ImageFileName);
-            MapImageViewModel.ImagePath = imageUri;
+            MapImageViewModel.LoadImage(_tourManager.GetFullImagePath(tour.ImageFileName));
         }
     }
 }
