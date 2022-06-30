@@ -1,45 +1,17 @@
-using Microsoft.AspNetCore.Mvc;
-using TourPlanner.Server.DAL;
-using TourPlanner.Server.DAL.Records;
+using TourPlanner.Server.Modules;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSingleton<IConfiguration>((_) =>
 {
-    return new ConfigurationBuilder().AddJsonFile("appsettings.json", false, true).Build();
+    return new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json", false, true)
+            .Build();
 });
-builder.Services.AddSingleton<INpgsqlDatabase, NpgsqlDatabase>();
-builder.Services.AddSingleton<ITourRepository, TourRepositoryPostgreSQL>();
+builder.Services.RegisterModules();
+
 var app = builder.Build();
+app.MapEndpoints();
+var config = app.Services.GetRequiredService<IConfiguration>();
+var host = $"{config["BaseAddress"]}:{config["Port"]}";
 
-app.MapGet("/tours", async ([FromServices] ITourRepository tourRepository) =>
-{
-    var tours = await tourRepository.GetAllAsync();
-    return Results.Ok(tours);
-});
-
-app.MapGet("/tours/{id}", async ([FromServices] ITourRepository tourRepository, Guid id) =>
-{
-    var tour = await tourRepository.GetByIdAsync(id);
-    return tour is not null ? Results.Ok(tour) : Results.NotFound();
-});
-
-app.MapPost("/tours", async ([FromServices] ITourRepository tourRepository, Tour tour) =>
-{
-    await tourRepository.CreateAsync(tour);
-    return Results.Created($"/tours/{tour.Id}", tour);
-});
-
-app.MapPut("/tours", async ([FromServices] ITourRepository tourRepository, Tour tour) =>
-{
-    await tourRepository.UpdateAsync(tour);
-    return Results.Ok(tour);
-});
-
-app.MapDelete("/tours/{id}", async ([FromServices] ITourRepository tourRepository, Guid id) =>
-{
-    await tourRepository.DeleteAsync(id);
-    return Results.Ok(id);
-});
-
-var host = $"{app.Services.GetRequiredService<IConfiguration>()["BaseUri"]}:{app.Services.GetRequiredService<IConfiguration>()["Port"]}";
 app.Run(host);
