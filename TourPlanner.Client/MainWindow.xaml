@@ -8,7 +8,9 @@
         xmlns:viewmodels="clr-namespace:TourPlanner.Client.ViewModels"
         d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
         mc:Ignorable="d"
-        Title="TourPlanner" Height="450" Width="800" Loaded="Window_Loaded">
+        Title="TourPlanner" Height="450" Width="800"
+        Loaded="Window_Loaded"
+        Closing="Window_Closing">
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
@@ -32,7 +34,7 @@
             <GridSplitter Grid.Column="0" Width="3" VerticalAlignment="Stretch" HorizontalAlignment="Right"/>
             <TabControl Grid.Column="1" Margin="5,10" Padding="2,0">
                 <TabItem Header="_Description">
-                    <views:TourDescriptionControl></views:TourDescriptionControl>
+                    <views:TourDescriptionControl x:Name="TourDescription"></views:TourDescriptionControl>
                 </TabItem>
                 <TabItem Header="_Route">
                     <views:MapImageControl x:Name="MapImage"></views:MapImageControl>

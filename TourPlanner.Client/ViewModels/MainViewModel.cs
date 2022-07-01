@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -40,7 +41,7 @@ namespace TourPlanner.Client.ViewModels
 
             OpenEditTourDialogCommand = new RelayCommand(_ =>
             {
-                var viewModel = new EditTourDialogViewModel(_tourManager, this, TourListViewModel.SelectedItem);
+                var viewModel = new EditTourDialogViewModel(_tourManager, TourListViewModel.SelectedItem);
                 var result = NavigationService?.NavigateTo(viewModel);
                 if (result == true)
                     SearchTours(TourListViewModel.SearchText);
@@ -63,7 +64,7 @@ namespace TourPlanner.Client.ViewModels
 
         private async void SearchTours(string? searchText)
         {
-            IEnumerable<Tour>? tours = null;
+            IEnumerable<Tour>? tours;
             if (string.IsNullOrEmpty(searchText))
             {
                 tours = await _tourManager.GetAllToursAsync();
@@ -77,12 +78,20 @@ namespace TourPlanner.Client.ViewModels
             TourListViewModel.SetItems(tours);
         }
 
-        private void LoadTour(Tour tour)
+        private async void LoadTour(Tour tour)
         {
-            if (tour == null)
-                return;
-            //TourDescriptionViewModel.LoadItem(tour);
-            MapImageViewModel.LoadImage(_tourManager.GetFullImagePath(tour.ImageFileName));
+            TourDescriptionViewModel.LoadItem(tour);
+            var imageUri = await _tourManager.GetImageAsync(tour.ImageFileName);
+            MapImageViewModel.LoadImage(imageUri);
+        }
+
+        public bool OnClosing()
+        {
+            bool close = false;
+            _tourManager.ClearCache();
+            // return false to close window
+            // true to cancel closing
+            return close;
         }
     }
 }

@@ -5,12 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TourPlanner.Client.DAL
+namespace TourPlanner.Shared.Filesystem
 {
     public interface IFilesystem
     {
         public string FilesystemPath { get; }
-        Guid SaveImage(byte[] bytes);
-        Image? LoadImage(Guid? id);
+        public bool ImageInCache(Guid? id);
+        Guid SaveImage(byte[] bytes, Guid? imageId = null);
+        byte[]? LoadImage(Guid? id);
+        Task ClearDirectory();
     }
 }

@@ -11,7 +11,7 @@ builder.Services.RegisterModules();
 
 var app = builder.Build();
 app.MapEndpoints();
+
 var config = app.Services.GetRequiredService<IConfiguration>();
 var host = $"{config["BaseAddress"]}:{config["Port"]}";
-
 app.Run(host);

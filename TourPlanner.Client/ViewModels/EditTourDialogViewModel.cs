@@ -14,7 +14,6 @@ namespace TourPlanner.Client.ViewModels
     internal class EditTourDialogViewModel : BaseViewModel, IDataErrorInfo, ICloseWindow
     {
         private readonly ITourManager _tourManager;
-        private readonly MainViewModel _mainViewModel;
 
         private string? _name;
         public string? Name
@@ -87,10 +86,9 @@ namespace TourPlanner.Client.ViewModels
         public ICommand CloseCommand { get; set; }
         public Action? Close { get; set; }
 
-        public EditTourDialogViewModel(ITourManager tourManager, MainViewModel mainViewModel, Tour tour)
+        public EditTourDialogViewModel(ITourManager tourManager, Tour tour)
         {
             _tourManager = tourManager;
-            _mainViewModel = mainViewModel;
             Tour = tour;
             Name = Tour.Name;
             Description = Tour.Description;
@@ -183,6 +181,11 @@ namespace TourPlanner.Client.ViewModels
 
             }
             return validationMessage;
+        }
+
+        public bool OnClosing()
+        {
+            return false;
         }
         #endregion
     }

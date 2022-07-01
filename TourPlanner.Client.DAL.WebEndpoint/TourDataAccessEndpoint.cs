@@ -24,7 +24,7 @@ namespace TourPlanner.Client.DAL.Endpoint
             };
             _logger = factory.CreateLogger<TourDataAccessEndpoint>();
         }
-        public async Task AddTourAsync(Tour tour)
+        public async Task AddTourAsync(TourUserInformation tour)
         {
             try
             {
@@ -73,6 +73,20 @@ namespace TourPlanner.Client.DAL.Endpoint
             }
             return null;
 
+        }
+
+        public async Task<byte[]?> GetImageAsync(Guid? imageId)
+        {
+            try
+            {
+                var image = await _httpClient.GetByteArrayAsync($"/tours/image/{imageId}");
+                return image;
+            }
+            catch (HttpRequestException e)
+            {
+                _logger.Error(e.Message);
+            }
+            return null;
         }
 
         public async Task<Tour?> GetTourById(Guid? id)

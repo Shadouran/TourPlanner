@@ -99,7 +99,7 @@ namespace TourPlanner.Client.ViewModels
             {
                 if (ValidateAll())
                 {
-                    var tour = new Tour(Name, Description, StartLocation, TargetLocation, TransportType, RouteInformation);
+                    var tour = new TourUserInformation(null, Name, Description, StartLocation, TargetLocation, TransportType, RouteInformation);
                     _tourManager.AddTourAsync(tour);
                     Close?.Invoke();
                 }
@@ -168,6 +168,11 @@ namespace TourPlanner.Client.ViewModels
 
             }
             return validationMessage;
+        }
+
+        public bool OnClosing()
+        {
+            return false;
         }
         #endregion
     }

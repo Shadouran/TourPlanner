@@ -10,12 +10,12 @@ namespace TourPlanner.Client.BL
 {
     public interface ITourManager
     {
-        Task AddTourAsync(Tour tour);
+        Task AddTourAsync(TourUserInformation tour);
         Task EditTourAsync(Tour tour);
         Task DeleteTourAsync(Guid? id);
         Task<IEnumerable<Tour>?> GetAllToursAsync();
         Task<Tour?> GetTourAsync(Guid? id);
-
-        Uri GetFullImagePath(Guid? id);
+        Task<Uri?> GetImageAsync(Guid imageId);
+        Task ClearCache();
     }
 }

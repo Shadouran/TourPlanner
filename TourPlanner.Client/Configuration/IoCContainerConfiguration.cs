@@ -12,6 +12,7 @@ using TourPlanner.Client.DAL.Endpoint;
 using TourPlanner.Client.Navigation;
 using TourPlanner.Client.ViewModels;
 using TourPlanner.Client.Views;
+using TourPlanner.Shared.Filesystem;
 using TourPlanner.Shared.Log4Net;
 using TourPlanner.Shared.Logging;
 
@@ -57,6 +58,7 @@ namespace TourPlanner.Client.IoCConfiguration
                 {
                     window.TourList.DataContext = viewModel.TourListViewModel;
                     window.MapImage.DataContext = viewModel.MapImageViewModel;
+                    window.TourDescription.DataContext = viewModel.TourDescriptionViewModel;
                 });
 
                 return navigationService;

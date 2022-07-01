@@ -20,5 +20,13 @@ namespace TourPlanner.Client
                 cw.Close += () => Close();
             }
         }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if(DataContext is ICloseWindow cw)
+            {
+                e.Cancel = cw.OnClosing();
+            }
+        }
     }
 }

@@ -9,5 +9,6 @@ namespace TourPlanner.Client.ViewModels
     internal interface ICloseWindow
     {
         public Action? Close { get; set; }
+        public bool OnClosing();
     }
 }
