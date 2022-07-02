@@ -71,15 +71,15 @@ namespace TourPlanner.Client.ViewModels
             }
             else
             {
-                // TODO implement getmatchingtours
-                //tours = await _tourManager.GetMatchingToursAsync(searchString);
-                tours = await _tourManager.GetAllToursAsync();
+                tours = await _tourManager.GetMatchingToursAsync(searchText);
             }
             TourListViewModel.SetItems(tours);
         }
 
-        private async void LoadTour(Tour tour)
+        private async void LoadTour(Tour? tour)
         {
+            if (tour == null)
+                return;
             TourDescriptionViewModel.LoadItem(tour);
             var imageUri = await _tourManager.GetImageAsync(tour.ImageFileName);
             MapImageViewModel.LoadImage(imageUri);

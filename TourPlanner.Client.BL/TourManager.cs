@@ -73,5 +73,13 @@ namespace TourPlanner.Client.BL
         {
             await _filesystem.ClearDirectory();
         }
+
+        public async Task<IEnumerable<Tour>?> GetMatchingToursAsync(string searchText)
+        {
+            var tours = await _tourDataAccess.GetAllToursAsync();
+            //var tours = await _tourDataAccess.GetMatchingToursAsync(searchText);
+            var matchingTours = tours.Where(t => t.Name.Contains(searchText) || t.Description.Contains(searchText));
+            return matchingTours;
+        }
     }
 }

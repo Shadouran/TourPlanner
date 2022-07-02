@@ -17,5 +17,6 @@ namespace TourPlanner.Client.BL
         Task<Tour?> GetTourAsync(Guid? id);
         Task<Uri?> GetImageAsync(Guid imageId);
         Task ClearCache();
+        Task<IEnumerable<Tour>?> GetMatchingToursAsync(string searchText);
     }
 }

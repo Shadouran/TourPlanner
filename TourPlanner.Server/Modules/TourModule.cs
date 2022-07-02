@@ -31,6 +31,12 @@ namespace TourPlanner.Server.Modules
                 return Results.Ok(tours);
             });
 
+            //endpoints.MapGet("/tours", async([FromServices] ITourRepository tourRepository, [FromQuery]string searchText) =>
+            //{
+            //    var tours = await tourRepository.GetMatchingAsync(searchText);
+            //    return Results.Ok(tours);
+            //});
+
             endpoints.MapGet("/tours/{id}", async ([FromServices] ITourRepository tourRepository, Guid id) =>
             {
                 var tour = await tourRepository.GetByIdAsync(id);

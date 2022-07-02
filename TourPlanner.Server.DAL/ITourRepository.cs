@@ -19,5 +19,6 @@ namespace TourPlanner.Server.DAL
         Task CreateAsync(Tour tour);
         Task UpdateAsync(Tour tour);
         Task DeleteAsync(Guid id);
+        Task<IEnumerable<Tour>> GetMatchingAsync(string searchText);
     }
 }
