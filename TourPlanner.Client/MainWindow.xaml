@@ -14,7 +14,9 @@
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
-                <MenuItem Header="_Exit" Command="{Binding CloseCommand}"></MenuItem>
+                <MenuItem Header="_Import..." Command="{Binding ImportCommand}"></MenuItem>
+                <MenuItem Header="_Export..." Command="{Binding ExportCommand}"></MenuItem>
+                <MenuItem Header="E_xit" Command="{Binding CloseCommand}"></MenuItem>
             </MenuItem>
             <MenuItem Header="_Edit">
                 <MenuItem Header="_Add Tour..." Command="{Binding OpenAddTourDialogCommand}"></MenuItem>

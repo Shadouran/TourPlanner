@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TourPlanner.Shared.Models;
 
 namespace TourPlanner.Shared.Filesystem
 {
@@ -14,5 +15,7 @@ namespace TourPlanner.Shared.Filesystem
         Guid SaveImage(byte[] bytes, Guid? imageId = null);
         byte[]? LoadImage(Guid? id);
         Task ClearDirectory();
+        Tour ImportTour(string filename);
+        Task ExportTourAsync(Tour tour, string filename);
     }
 }
