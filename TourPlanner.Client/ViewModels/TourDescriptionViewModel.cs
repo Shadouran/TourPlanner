@@ -101,8 +101,21 @@ namespace TourPlanner.Client.ViewModels
 
         }
 
-        public void LoadItem(Tour tour)
+        public void LoadItem(Tour? tour)
         {
+            if(tour == null)
+            {
+                Name = null;
+                Description = null;
+                StartLocation = null;
+                TargetLocation = null;
+                TransportType = null;
+                RouteInformation = null;
+                Distance = null;
+                EstimatedTime = null;
+                return;
+            }
+
             Name = tour.Name;
             Description = tour.Description;
             StartLocation = tour.StartLocation;

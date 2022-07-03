@@ -15,6 +15,7 @@ namespace TourPlanner.Client.ViewModels
     {
         private readonly ITourManager _tourManager;
 
+
         private string? _name;
         public string? Name
         {
@@ -113,7 +114,6 @@ namespace TourPlanner.Client.ViewModels
                     Tour.TargetLocation = TargetLocation;
                     Tour.TransportType = TransportType;
                     Tour.RouteInformation = RouteInformation;
-                    _tourManager.EditTourAsync(Tour);
                     Close?.Invoke();
                 }
             });

@@ -32,5 +32,10 @@ namespace TourPlanner.Client.Views
                 cw.Close += () => Close();
             }
         }
+
+        private void OkButton_Click(object sender, RoutedEventArgs e)
+        {
+            DialogResult = true;
+        }
     }
 }

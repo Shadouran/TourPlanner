@@ -37,9 +37,10 @@ namespace TourPlanner.Client.BL
             await _tourDataAccess.DeleteTourAsync(id);
         }
 
-        public async Task EditTourAsync(Tour tour)
+        public async Task<Tour?> EditTourAsync(Tour tour)
         {
-            await _tourDataAccess.EditTourAsync(tour);
+            _filesystem.DeleteImage(tour.ImageFileName);
+            return await _tourDataAccess.EditTourAsync(tour);
         }
 
         public async Task<IEnumerable<Tour>?> GetAllToursAsync()
@@ -71,13 +72,12 @@ namespace TourPlanner.Client.BL
 
         public async Task ClearCache()
         {
-            await _filesystem.ClearDirectory();
+            await _filesystem.ClearDirectoryAsync();
         }
 
         public async Task<IEnumerable<Tour>?> GetMatchingToursAsync(string searchText)
         {
             var tours = await _tourDataAccess.GetAllToursAsync();
-            //var tours = await _tourDataAccess.GetMatchingToursAsync(searchText);
             var matchingTours = tours.Where(t => t.Name.Contains(searchText) || t.Description.Contains(searchText));
             return matchingTours;
         }

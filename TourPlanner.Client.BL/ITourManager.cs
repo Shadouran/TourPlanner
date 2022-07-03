@@ -11,7 +11,7 @@ namespace TourPlanner.Client.BL
     public interface ITourManager
     {
         Task AddTourAsync(TourUserInformation tour);
-        Task EditTourAsync(Tour tour);
+        Task<Tour?> EditTourAsync(Tour tour);
         Task DeleteTourAsync(Guid? id);
         Task<IEnumerable<Tour>?> GetAllToursAsync();
         Task<Tour?> GetTourAsync(Guid? id);

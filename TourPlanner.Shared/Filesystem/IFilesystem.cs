@@ -14,7 +14,8 @@ namespace TourPlanner.Shared.Filesystem
         public bool ImageInCache(Guid? id);
         Guid SaveImage(byte[] bytes, Guid? imageId = null);
         byte[]? LoadImage(Guid? id);
-        Task ClearDirectory();
+        Task ClearDirectoryAsync();
+        void DeleteImage(Guid id);
         Tour ImportTour(string filename);
         Task ExportTourAsync(Tour tour, string filename);
     }
