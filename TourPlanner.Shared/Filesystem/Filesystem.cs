@@ -37,7 +37,7 @@ namespace TourPlanner.Shared.Filesystem
             if (!File.Exists(path))
                 return null;
 
-            var image = Image.FromFile(path);
+            using var image = Image.FromFile(path);
             using var ms = new MemoryStream();
             image.Save(ms, ImageFormat.Jpeg);
             var array = ms.ToArray();
@@ -58,7 +58,7 @@ namespace TourPlanner.Shared.Filesystem
             return id;
         }
 
-        public async Task ClearDirectory()
+        public async Task ClearDirectoryAsync()
         {
             await Task.Run(() =>
             {
@@ -68,6 +68,13 @@ namespace TourPlanner.Shared.Filesystem
                     File.Delete(file);
                 }
             });
+        }
+
+        public void DeleteImage(Guid id)
+        {
+            var path = Path.Combine(_path, id.ToString());
+            path = Path.ChangeExtension(path, "jpeg");
+            File.Delete(path);
         }
     }
 }

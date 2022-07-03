@@ -126,7 +126,7 @@ namespace TourPlanner.Server.DAL
         public Tour? GetById(Guid id)
         {
             using var cmd = new NpgsqlCommand(GetTourByIdQuery, _connection);
-            cmd.Parameters.AddWithValue("id", id);
+            cmd.Parameters.AddWithValue("id", id.ToString());
             Tour? result = null;
             lock(_databaseLock)
             {

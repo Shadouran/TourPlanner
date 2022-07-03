@@ -39,12 +39,16 @@ namespace TourPlanner.Client.ViewModels
                 NavigationService?.NavigateTo<AddTourDialogViewModel>();
             });
 
-            OpenEditTourDialogCommand = new RelayCommand(_ =>
+            OpenEditTourDialogCommand = new RelayCommand(async _ =>
             {
                 var viewModel = new EditTourDialogViewModel(_tourManager, TourListViewModel.SelectedItem);
-                NavigationService?.NavigateTo(viewModel);
-                LoadTour(null);
-                LoadTour(TourListViewModel.SelectedItem);
+                var result = NavigationService?.NavigateTo(viewModel);
+                if(result == true)
+                {
+                    // TODO FUCKING RELOAD IS GARBAGE PROB NOT GONNA HAPPEN
+                    LoadTour(null);
+                    LoadTour(await _tourManager.EditTourAsync(TourListViewModel.SelectedItem));
+                }
             }, _ => TourListViewModel.SelectedItem != null);
 
 
@@ -78,11 +82,14 @@ namespace TourPlanner.Client.ViewModels
 
         private async void LoadTour(Tour? tour)
         {
-            if (tour == null)
-                return;
             TourDescriptionViewModel.LoadItem(tour);
-            var imageUri = await _tourManager.GetImageAsync(tour.ImageFileName);
-            MapImageViewModel.LoadImage(imageUri);
+            if(tour != null)
+            {
+                var imageUri = await _tourManager.GetImageAsync(tour.ImageFileName);
+                MapImageViewModel.LoadImage(imageUri);
+                return;
+            }
+            MapImageViewModel.LoadImage(null);
         }
 
         public bool OnClosing()

@@ -32,11 +32,12 @@ namespace TourPlanner.Client.ViewModels
 
         public void LoadImage(Uri? imageUri)
         {
-            // TODO
-            // delete when closing application
-            if (imageUri == null)
-                return;
             var bitmap = new BitmapImage();
+            if (imageUri == null)
+            {
+                Image = bitmap;
+                return;
+            }
             // TODO pretty sure this violates layering
             using var stream = File.OpenRead(imageUri.AbsolutePath);
             bitmap.BeginInit();

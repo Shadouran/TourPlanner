@@ -11,7 +11,7 @@ namespace TourPlanner.Client.DAL
     {
         Task AddTourAsync(TourUserInformation tour);
         Task DeleteTourAsync(Guid? id);
-        Task EditTourAsync(Tour tour);
+        Task<Tour?> EditTourAsync(Tour tour);
         Task<ICollection<Tour>?> GetAllToursAsync();
         Task<Tour?> GetTourById(Guid? id);
         Task<byte[]?> GetImageAsync(Guid? imageId);

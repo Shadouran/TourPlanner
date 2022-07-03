@@ -48,16 +48,19 @@ namespace TourPlanner.Client.DAL.Endpoint
             }
         }
 
-        public async Task EditTourAsync(Tour tour)
+        public async Task<Tour?> EditTourAsync(Tour tour)
         {
             try
             {
-                await _httpClient.PutAsJsonAsync($"/tours", tour);
+                var response = await _httpClient.PutAsJsonAsync($"/tours", tour);
+                var stringContent = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<Tour>(stringContent);
             }
-            catch (HttpRequestException e)
+            catch (Exception e)
             {
                 _logger.Error(e.Message);
             }
+            return null;
         }
 
         public async Task<ICollection<Tour>?> GetAllToursAsync()

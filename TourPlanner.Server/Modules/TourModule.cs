@@ -79,14 +79,40 @@ namespace TourPlanner.Server.Modules
                 return Results.Created($"/tours/{tour.Id}", tour);
             });
 
-            endpoints.MapPut("/tours", async ([FromServices] ITourRepository tourRepository, Tour tour) =>
+            endpoints.MapPut("/tours", async ([FromServices] ITourRepository tourRepository,
+                                            [FromServices] IConfiguration configuration,
+                                            [FromServices] IMapAPI mapApi,
+                                            [FromServices] IFilesystem filesystem,
+                                            Tour tour) =>
             {
-                await tourRepository.UpdateAsync(tour);
-                return Results.Ok(tour);
+                var apiKey = configuration.GetRequiredSection("MapAPI")["Key"];
+                var uriBuilder = new MapQuestUriBuilder(apiKey);
+                uriBuilder.Direction(tour.StartLocation, tour.TargetLocation);
+                var uri = uriBuilder.Build();
+
+                var info = await mapApi.GetDirections(uri);
+                float Distance = info.Distance;
+                int EstimatedTime = info.EstimatedTime;
+
+                uriBuilder = new MapQuestUriBuilder(apiKey);
+                uriBuilder.BoundingBox(info.UpperLeft, info.LowerRight);
+                uriBuilder.Route(tour.StartLocation, tour.TargetLocation);
+                uriBuilder.Size(800, 800);
+                uri = uriBuilder.Build();
+
+                filesystem.DeleteImage(tour.ImageFileName);
+                var mapImageBytes = await mapApi.GetMapImage(uri);
+                var id = filesystem.SaveImage(mapImageBytes);
+
+                var updatedTour = new Tour(tour.Id, tour.Name, tour.Description, tour.StartLocation, tour.TargetLocation, tour.TransportType, tour.RouteInformation, Distance, EstimatedTime, id);
+                await tourRepository.UpdateAsync(updatedTour);
+                return Results.Ok(updatedTour);
             });
 
-            endpoints.MapDelete("/tours/{id}", async ([FromServices] ITourRepository tourRepository, Guid id) =>
+            endpoints.MapDelete("/tours/{id}", async ([FromServices] ITourRepository tourRepository, [FromServices] IFilesystem filesystem, Guid id) =>
             {
+                var tour = await tourRepository.GetByIdAsync(id);
+                filesystem.DeleteImage(tour.ImageFileName);
                 await tourRepository.DeleteAsync(id);
                 return Results.Ok(id);
             });
