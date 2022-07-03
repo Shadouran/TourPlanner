@@ -89,6 +89,20 @@ namespace TourPlanner.Client.DAL.Endpoint
             return null;
         }
 
+        public async Task<IEnumerable<Tour>?> GetMatchingToursAsync(string searchText)
+        {
+            try
+            {
+                var tours = await _httpClient.GetFromJsonAsync<IEnumerable<Tour>?>($"/tours?search={searchText}");
+                return tours;
+            }
+            catch (HttpRequestException e)
+            {
+                _logger.Error(e.Message);
+            }
+            return null;
+        }
+
         public async Task<Tour?> GetTourById(Guid? id)
         {
             try

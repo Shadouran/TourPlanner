@@ -9,9 +9,10 @@ namespace TourPlanner.Server.DAL
         private const string CreateTourQuery = "INSERT INTO tours (id, name, description, startlocation, targetlocation, transporttype, distance, estimatedtime, routeinformation, imagefilename) VALUES (@id, @name, @description, @startlocation, @targetlocation, @transporttype, @distance, @estimatedtime, @routeinformation, @imagefilename)";
         private const string GetAllToursQuery = "SELECT * FROM tours";
         private const string GetTourByIdQuery = "SELECT * FROM tours WHERE id=@id";
+        private const string GetMatchingsToursQuery = "SELECT * FROM tours WHERE ";
         private const string DeleteTourQuery = "DELETE FROM tours WHERE id=@id";
         private const string UpdateTourQuery = "UPDATE tours SET name=@name, description=@description, startlocation=@startlocation, targetlocation=@targetlocation, transporttype=@transporttype, distance=@distance, estimatedtime=@estimatedtime, routeinformation=@routeinformation, imagefilename=@imagefilename WHERE id=@id";
-
+        
         private readonly NpgsqlConnection _connection;
         private readonly object _databaseLock;
         public TourRepositoryPostgreSQL(INpgsqlDatabase database)
@@ -169,6 +170,11 @@ namespace TourPlanner.Server.DAL
             }
             await reader.CloseAsync();
             return result;
+        }
+
+        public Task<IEnumerable<Tour>> GetMatchingAsync(string searchText)
+        {
+            throw new NotImplementedException();
         }
 
         public void Update(Tour tour)
