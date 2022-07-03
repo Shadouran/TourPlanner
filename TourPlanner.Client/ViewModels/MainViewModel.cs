@@ -16,6 +16,8 @@ namespace TourPlanner.Client.ViewModels
         public TourListViewModel TourListViewModel { get; }
         public TourDescriptionViewModel TourDescriptionViewModel { get; }
         public MapImageViewModel MapImageViewModel { get; }
+        public ICommand ImportCommand { get; set; }
+        public ICommand ExportCommand { get; set; }
         public ICommand CloseCommand { get; set; }
         public ICommand OpenAddTourDialogCommand { get; set; }
         public ICommand OpenEditTourDialogCommand { get; set; }
@@ -28,6 +30,37 @@ namespace TourPlanner.Client.ViewModels
             TourDescriptionViewModel = tourDescriptionViewModel;
             MapImageViewModel = mapImageViewModel;
             SearchTours(null);
+
+            ImportCommand = new RelayCommand(_ =>
+            {
+                // TODO getout
+                var dialog = new Microsoft.Win32.OpenFileDialog
+                {
+                    FileName = "Documents",
+                    DefaultExt = ".csv",
+                    Filter = "CSV Files (.csv)|*.csv"
+                };
+                if (dialog.ShowDialog() == true)
+                {
+                    var filename = dialog.FileName;
+                    _tourManager.ImportTourAsync(filename);
+                }
+            });
+
+            ExportCommand = new RelayCommand(_ =>
+            {
+                var dialog = new Microsoft.Win32.SaveFileDialog
+                {
+                    FileName = "Documents",
+                    DefaultExt = ".csv",
+                    Filter = "CSV Files (.csv)|*.csv"
+                };
+                if(dialog.ShowDialog() == true)
+                {
+                    string filename = dialog.FileName;
+                    _tourManager.ExportTourAsync(TourListViewModel.SelectedItem, filename);
+                }
+            }, _ => TourListViewModel.SelectedItem != null);
 
             CloseCommand = new RelayCommand(_ =>
             {

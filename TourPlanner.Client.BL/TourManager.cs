@@ -73,5 +73,17 @@ namespace TourPlanner.Client.BL
         {
             await _filesystem.ClearDirectory();
         }
+
+        public async void ImportTourAsync(string filename)
+        {
+            Tour tour = _filesystem.ImportTour(filename);
+            tour.Id = Guid.NewGuid();
+            await _tourDataAccess.ImportTourAsync(tour);
+        }
+
+        public async void ExportTourAsync(Tour tour, string filename)
+        {
+            await _filesystem.ExportTourAsync(tour, filename);
+        }
     }
 }
