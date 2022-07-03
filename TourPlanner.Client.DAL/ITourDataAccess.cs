@@ -16,5 +16,6 @@ namespace TourPlanner.Client.DAL
         Task<Tour?> GetTourById(Guid? id);
         Task<byte[]?> GetImageAsync(Guid? imageId);
         Task<IEnumerable<Tour>?> GetMatchingToursAsync(string searchText);
+        Task ImportTourAsync(Tour tour);
     }
 }

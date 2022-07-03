@@ -81,5 +81,17 @@ namespace TourPlanner.Client.BL
             var matchingTours = tours.Where(t => t.Name.Contains(searchText) || t.Description.Contains(searchText));
             return matchingTours;
         }
+        
+        public async void ImportTourAsync(string filename)
+        {
+            Tour tour = _filesystem.ImportTour(filename);
+            tour.Id = Guid.NewGuid();
+            await _tourDataAccess.ImportTourAsync(tour);
+        }
+
+        public async void ExportTourAsync(Tour tour, string filename)
+        {
+            await _filesystem.ExportTourAsync(tour, filename);
+        }
     }
 }

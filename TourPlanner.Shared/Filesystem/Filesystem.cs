@@ -1,11 +1,15 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using CsvHelper;
+using CsvHelper.Configuration;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TourPlanner.Shared.Models;
 
 namespace TourPlanner.Shared.Filesystem
 {
@@ -67,6 +71,36 @@ namespace TourPlanner.Shared.Filesystem
                 {
                     File.Delete(file);
                 }
+            });
+        }
+
+        public Tour ImportTour(string filename)
+        {
+            var uri = new Uri(filename, UriKind.Absolute);
+            using var reader = new StreamReader(uri.AbsolutePath);
+            using var csv = new CsvReader(reader, CultureInfo.CurrentCulture);
+            try
+            {
+                var records = csv.GetRecords<Tour>();
+                return records.First();
+            }
+            catch (Exception)
+            {
+                throw new InvalidFileException("CSV file content is invalid");
+            }
+        }
+
+        public async Task ExportTourAsync(Tour tour, string filename)
+        {
+            await Task.Run(() =>
+            {
+                using var writer = new StreamWriter(filename);
+                using var csv = new CsvWriter(writer, CultureInfo.CurrentCulture);
+                var list = new List<Tour>
+                {
+                    tour
+                };
+                csv.WriteRecords(list);
             });
         }
     }

@@ -79,6 +79,33 @@ namespace TourPlanner.Server.Modules
                 return Results.Created($"/tours/{tour.Id}", tour);
             });
 
+            endpoints.MapPost("/tour/import", async([FromServices] ITourRepository tourRepository,
+                                                    [FromServices] IConfiguration configuration,
+                                                    [FromServices] IMapAPI mapApi,
+                                                    [FromServices] IFilesystem filesystem,
+                                                    Tour tour) =>
+            {
+                var apiKey = configuration.GetRequiredSection("MapAPI")["Key"];
+                var uriBuilder = new MapQuestUriBuilder(apiKey);
+                uriBuilder.Direction(tour.StartLocation, tour.TargetLocation);
+                var uri = uriBuilder.Build();
+                var info = await mapApi.GetDirections(uri);
+
+                uriBuilder = new MapQuestUriBuilder(apiKey);
+                uriBuilder.BoundingBox(info.UpperLeft, info.LowerRight);
+                uriBuilder.Route(tour.StartLocation, tour.TargetLocation);
+                uriBuilder.Size(800, 800);
+                uri = uriBuilder.Build();
+
+                var mapImageBytes = await mapApi.GetMapImage(uri);
+                var id = filesystem.SaveImage(mapImageBytes);
+
+                var newTour = new Tour(tour.Id, tour.Name, tour.Description, tour.StartLocation, tour.TransportType, tour.TargetLocation, tour.RouteInformation, tour.Distance, tour.EstimatedTime, id);
+
+                await tourRepository.CreateAsync(newTour);
+                return Results.Created($"/tours/{newTour.Id}", newTour);
+            });
+
             endpoints.MapPut("/tours", async ([FromServices] ITourRepository tourRepository, Tour tour) =>
             {
                 await tourRepository.UpdateAsync(tour);
