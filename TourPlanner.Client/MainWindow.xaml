@@ -41,7 +41,9 @@
                 <TabItem Header="_Route">
                     <views:MapImageControl x:Name="MapImage"></views:MapImageControl>
                 </TabItem>
-                <TabItem Header="_Logs"></TabItem>
+                <TabItem Header="_Logs">
+                    <views:TourLogsView x:Name="TourLogs"></views:TourLogsView>
+                </TabItem>
             </TabControl>
         </Grid>
     </DockPanel>

@@ -11,7 +11,7 @@ using TourPlanner.Shared.Models;
 
 namespace TourPlanner.Client.DAL.Endpoint
 {
-    public class TourDataAccessEndpoint : ITourDataAccess
+    public class TourDataAccessEndpoint : ITourDataAccess, ILogDataAccess
     {
         private readonly HttpClient _httpClient;
         private readonly ILogger _logger;
@@ -127,6 +127,42 @@ namespace TourPlanner.Client.DAL.Endpoint
                 await _httpClient.PostAsJsonAsync("/tour/import", tour);
             }
             catch (HttpRequestException e)
+            {
+                _logger.Error(e.Message);
+            }
+        }
+
+        public async Task AddTourLogAsync(Guid tourId, TourLog? log)
+        {
+            try
+            {
+                await _httpClient.PostAsJsonAsync($"/tour/log/{tourId}", log);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e.Message);
+            }
+        }
+
+        public async Task EditTourLogAsync(Guid tourId, TourLog? log)
+        {
+            try
+            {
+                await _httpClient.PutAsJsonAsync($"/tour/log/{tourId}", log);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e.Message);
+            }
+        }
+
+        public async Task DeleteTourLogAsync(Guid? id)
+        {
+            try
+            {
+                await _httpClient.DeleteAsync($"/tour/log/{id}");
+            }
+            catch (Exception e)
             {
                 _logger.Error(e.Message);
             }
