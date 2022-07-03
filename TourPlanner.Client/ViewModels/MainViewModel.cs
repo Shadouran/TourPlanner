@@ -42,9 +42,9 @@ namespace TourPlanner.Client.ViewModels
             OpenEditTourDialogCommand = new RelayCommand(_ =>
             {
                 var viewModel = new EditTourDialogViewModel(_tourManager, TourListViewModel.SelectedItem);
-                var result = NavigationService?.NavigateTo(viewModel);
-                if (result == true)
-                    SearchTours(TourListViewModel.SearchText);
+                NavigationService?.NavigateTo(viewModel);
+                LoadTour(null);
+                LoadTour(TourListViewModel.SelectedItem);
             }, _ => TourListViewModel.SelectedItem != null);
 
 

@@ -52,7 +52,7 @@ namespace TourPlanner.Client.DAL.Endpoint
         {
             try
             {
-                await _httpClient.PutAsJsonAsync($"/tours/{tour.Id}", tour);
+                await _httpClient.PutAsJsonAsync($"/tours", tour);
             }
             catch (HttpRequestException e)
             {

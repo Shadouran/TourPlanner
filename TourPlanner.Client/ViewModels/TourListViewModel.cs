@@ -54,6 +54,7 @@ namespace TourPlanner.Client.ViewModels
             {
                 await _tourManager.DeleteTourAsync(SelectedItem.Id);
                 SearchTextChanged?.Invoke(this, SearchText);
+                SelectedItem = null;
             }, _ => SelectedItem != null);
 
             SearchCommand = new RelayCommand(_ =>
