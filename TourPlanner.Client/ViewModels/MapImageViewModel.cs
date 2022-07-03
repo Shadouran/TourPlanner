@@ -15,8 +15,8 @@ namespace TourPlanner.Client.ViewModels
 {
     internal class MapImageViewModel : BaseViewModel
     {
-        ImageSource _image;
-        public ImageSource Image
+        ImageSource? _image;
+        public ImageSource? Image
         {
             get => _image;
             set
@@ -25,11 +25,6 @@ namespace TourPlanner.Client.ViewModels
                 OnPropertyChanged();
             }
         }
-        public MapImageViewModel()
-        {
-
-        }
-
         public void LoadImage(Uri? imageUri)
         {
             var bitmap = new BitmapImage();

@@ -119,5 +119,17 @@ namespace TourPlanner.Client.DAL.Endpoint
             }
             return null;
         }
+
+        public async Task ImportTourAsync(Tour tour)
+        {
+            try
+            {
+                await _httpClient.PostAsJsonAsync("/tour/import", tour);
+            }
+            catch (HttpRequestException e)
+            {
+                _logger.Error(e.Message);
+            }
+        }
     }
 }

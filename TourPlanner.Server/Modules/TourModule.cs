@@ -78,7 +78,7 @@ namespace TourPlanner.Server.Modules
                 await tourRepository.CreateAsync(tour);
                 return Results.Created($"/tours/{tour.Id}", tour);
             });
-
+            
             endpoints.MapPut("/tours", async ([FromServices] ITourRepository tourRepository,
                                             [FromServices] IConfiguration configuration,
                                             [FromServices] IMapAPI mapApi,
