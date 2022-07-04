@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using TourPlanner.Client.BL;
+using TourPlanner.Client.BL.ReportGeneration;
 using TourPlanner.Shared.Models;
 
 namespace TourPlanner.Client.ViewModels
@@ -14,12 +15,15 @@ namespace TourPlanner.Client.ViewModels
     {
         private readonly ITourManager _tourManager;
         private readonly ILogManager _logManager;
+        private readonly IReportGenerator _reportGenerator;
         public TourListViewModel TourListViewModel { get; }
         public TourDescriptionViewModel TourDescriptionViewModel { get; }
         public MapImageViewModel MapImageViewModel { get; }
         public TourLogsListViewModel TourLogsListViewModel { get; }
         public ICommand ImportCommand { get; set; }
         public ICommand ExportCommand { get; set; }
+        public ICommand GenerateTourReportCommand { get; set; }
+        public ICommand GenerateSummaryReportCommand { get; set; }
         public ICommand CloseCommand { get; set; }
         public ICommand OpenAddTourDialogCommand { get; set; }
         public ICommand OpenEditTourDialogCommand { get; set; }
@@ -28,11 +32,12 @@ namespace TourPlanner.Client.ViewModels
         public ICommand DeleteLogCommand { get; set; }
         public Action? Close { get; set; }
 
-        public MainViewModel(ITourManager tourManager, ILogManager logManager,
+        public MainViewModel(ITourManager tourManager, ILogManager logManager, IReportGeneratorFactory reportGeneratorFactory,
             TourListViewModel tourListViewModel, TourDescriptionViewModel tourDescriptionViewModel, MapImageViewModel mapImageViewModel, TourLogsListViewModel tourLogsListViewModel)
         {
             _tourManager = tourManager;
             _logManager = logManager;
+            _reportGenerator = reportGeneratorFactory.CreateReportGenerator();
             TourListViewModel = tourListViewModel;
             TourDescriptionViewModel = tourDescriptionViewModel;
             MapImageViewModel = mapImageViewModel;
@@ -69,6 +74,36 @@ namespace TourPlanner.Client.ViewModels
                     _tourManager.ExportTourAsync(TourListViewModel.SelectedItem, filename);
                 }
             }, _ => TourListViewModel.SelectedItem != null);
+
+            GenerateTourReportCommand = new RelayCommand(_ =>
+            {
+                var dialog = new Microsoft.Win32.SaveFileDialog
+                {
+                    FileName = "Documents",
+                    DefaultExt = ".pdf",
+                    Filter = "PDF Files (.pdf)|*.pdf"
+                };
+                if (dialog.ShowDialog() == true)
+                {
+                    string filename = dialog.FileName;
+                    _reportGenerator.GenerateTourReport(TourListViewModel.SelectedItem, filename);
+                }
+            }, _ => TourListViewModel.SelectedItem != null);
+
+            GenerateSummaryReportCommand = new RelayCommand(_ =>
+            {
+                var dialog = new Microsoft.Win32.SaveFileDialog
+                {
+                    FileName = "Documents",
+                    DefaultExt = ".pdf",
+                    Filter = "PDF Files (.pdf)|*.pdf"
+                };
+                if (dialog.ShowDialog() == true)
+                {
+                    string filename = dialog.FileName;
+                    _reportGenerator.GenerateSummaryReport(TourListViewModel.Items, filename);
+                }
+            }, _ => TourListViewModel.Items.Count > 0);
 
             CloseCommand = new RelayCommand(_ =>
             {

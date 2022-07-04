@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TourPlanner.Client.BL;
+using TourPlanner.Client.BL.ReportGeneration;
 using TourPlanner.Client.DAL;
 using TourPlanner.Client.DAL.Endpoint;
 using TourPlanner.Client.Navigation;
@@ -47,6 +48,7 @@ namespace TourPlanner.Client.IoCConfiguration
             // BL Setup
             services.AddSingleton<ITourManager, TourManager>();
             services.AddSingleton<ILogManager, TourLogManager>();
+            services.AddSingleton<IReportGeneratorFactory, QuestPdfGeneratorFactory>();
 
             // UI Setup
             services.AddSingleton<INavigationService, NavigationService>(s =>

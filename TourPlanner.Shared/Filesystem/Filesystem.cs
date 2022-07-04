@@ -9,17 +9,20 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TourPlanner.Shared.Logging;
 using TourPlanner.Shared.Models;
 
 namespace TourPlanner.Shared.Filesystem
 {
     public class Filesystem : IFilesystem
     {
+        private readonly ILogger _logger;
         private readonly string _path;
         public string FilesystemPath => _path;
 
-        public Filesystem(IConfiguration configuration)
+        public Filesystem(ILoggerFactory loggerFactory, IConfiguration configuration)
         {
+            _logger = loggerFactory.CreateLogger<Filesystem>();
             _path = configuration["ImageDirectory"];
         }
 
@@ -69,7 +72,14 @@ namespace TourPlanner.Shared.Filesystem
                 var files = Directory.EnumerateFiles(_path);
                 foreach (var file in files)
                 {
-                    File.Delete(file);
+                    try
+                    {
+                        File.Delete(file);
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.Error(e.Message);
+                    }
                 }
             });
         }
@@ -78,7 +88,14 @@ namespace TourPlanner.Shared.Filesystem
         {
             var path = Path.Combine(_path, id.ToString());
             path = Path.ChangeExtension(path, "jpeg");
-            File.Delete(path);
+            try
+            {
+                File.Delete(path);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e.Message);
+            }
         }
         
         public Tour ImportTour(string filename)
@@ -107,7 +124,35 @@ namespace TourPlanner.Shared.Filesystem
                 {
                     tour
                 };
-                csv.WriteRecords(list);
+                try
+                {
+                    csv.WriteRecords(list);
+                }
+                catch (Exception e)
+                {
+                    _logger.Error(e.Message);
+                }
+            });
+        }
+
+        public async void SaveReport(byte[] report, string filename, DocumentType type)
+        {
+            await Task.Run(() =>
+            {
+                switch(type)
+                {
+                    case DocumentType.PDF:
+                        Path.ChangeExtension(filename, "pdf");
+                        break;
+                }
+                try
+                {
+                    File.WriteAllBytes(filename, report);
+                }
+                catch (Exception e)
+                {
+                    _logger.Error(e.Message);
+                }
             });
         }
     }
