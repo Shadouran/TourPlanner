@@ -16,8 +16,11 @@ namespace TourPlanner.Client.BL
         {
             _logDataAccess = logDataAccess;
         }
+
+
         public async void AddTourLogAsync(Guid tourId, TourLog? log)
         {
+            log.Id = Guid.NewGuid();
             await _logDataAccess.AddTourLogAsync(tourId, log);
         }
 
@@ -26,9 +29,14 @@ namespace TourPlanner.Client.BL
             await _logDataAccess.DeleteTourLogAsync(id);
         }
 
-        public async void EditTourLogAsync(Guid tourId, TourLog? log)
+        public async void EditTourLogAsync(TourLog? log)
         {
-            await _logDataAccess.EditTourLogAsync(tourId, log);
+            await _logDataAccess.EditTourLogAsync(log);
+        }
+
+        public async Task<IEnumerable<TourLog>?> GetAllTourLogsAsync(Guid tourId)
+        {
+            return await _logDataAccess.GetAllTourLogsAsync(tourId);
         }
     }
 }

@@ -136,7 +136,7 @@ namespace TourPlanner.Client.DAL.Endpoint
         {
             try
             {
-                await _httpClient.PostAsJsonAsync($"/tour/log/{tourId}", log);
+                await _httpClient.PostAsJsonAsync($"/tours/logs/{tourId}", log);
             }
             catch (Exception e)
             {
@@ -144,11 +144,11 @@ namespace TourPlanner.Client.DAL.Endpoint
             }
         }
 
-        public async Task EditTourLogAsync(Guid tourId, TourLog? log)
+        public async Task EditTourLogAsync(TourLog? log)
         {
             try
             {
-                await _httpClient.PutAsJsonAsync($"/tour/log/{tourId}", log);
+                await _httpClient.PutAsJsonAsync($"/tours/logs/", log);
             }
             catch (Exception e)
             {
@@ -160,12 +160,25 @@ namespace TourPlanner.Client.DAL.Endpoint
         {
             try
             {
-                await _httpClient.DeleteAsync($"/tour/log/{id}");
+                await _httpClient.DeleteAsync($"/tours/logs/{id}");
             }
             catch (Exception e)
             {
                 _logger.Error(e.Message);
             }
+        }
+
+        public async Task<IEnumerable<TourLog>?> GetAllTourLogsAsync(Guid tourId)
+        {
+            try
+            {
+                return await _httpClient.GetFromJsonAsync<IEnumerable<TourLog>>($"/tours/logs/{tourId}");
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e.Message);
+            }
+            return null;
         }
     }
 }

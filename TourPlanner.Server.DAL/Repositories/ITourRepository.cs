@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TourPlanner.Server.DAL.Records;
 
-namespace TourPlanner.Server.DAL
+namespace TourPlanner.Server.DAL.Repositories
 {
     public interface ITourRepository
     {

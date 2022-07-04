@@ -9,7 +9,8 @@ namespace TourPlanner.Client.BL
 {
     public interface ILogManager
     {
-        void EditTourLogAsync(Guid tourId, TourLog? log);
+        Task<IEnumerable<TourLog>?> GetAllTourLogsAsync(Guid tourId);
+        void EditTourLogAsync(TourLog? log);
         Task DeleteTourLogAsync(Guid? id);
         void AddTourLogAsync(Guid tourId, TourLog? log);
     }

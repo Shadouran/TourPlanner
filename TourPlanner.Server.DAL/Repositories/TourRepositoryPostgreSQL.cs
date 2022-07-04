@@ -1,7 +1,7 @@
 ﻿using Npgsql;
 using TourPlanner.Server.DAL.Records;
 
-namespace TourPlanner.Server.DAL
+namespace TourPlanner.Server.DAL.Repositories
 {
     public class TourRepositoryPostgreSQL : ITourRepository
     {
@@ -9,10 +9,9 @@ namespace TourPlanner.Server.DAL
         private const string CreateTourQuery = "INSERT INTO tours (id, name, description, startlocation, targetlocation, transporttype, distance, estimatedtime, routeinformation, imagefilename) VALUES (@id, @name, @description, @startlocation, @targetlocation, @transporttype, @distance, @estimatedtime, @routeinformation, @imagefilename)";
         private const string GetAllToursQuery = "SELECT * FROM tours";
         private const string GetTourByIdQuery = "SELECT * FROM tours WHERE id=@id";
-        private const string GetMatchingsToursQuery = "SELECT * FROM tours WHERE ";
         private const string DeleteTourQuery = "DELETE FROM tours WHERE id=@id";
         private const string UpdateTourQuery = "UPDATE tours SET name=@name, description=@description, startlocation=@startlocation, targetlocation=@targetlocation, transporttype=@transporttype, distance=@distance, estimatedtime=@estimatedtime, routeinformation=@routeinformation, imagefilename=@imagefilename WHERE id=@id";
-        
+
         private readonly NpgsqlConnection _connection;
         private readonly object _databaseLock;
         public TourRepositoryPostgreSQL(INpgsqlDatabase database)
@@ -61,7 +60,7 @@ namespace TourPlanner.Server.DAL
         {
             using var cmd = new NpgsqlCommand(DeleteTourQuery, _connection);
             cmd.Parameters.AddWithValue("id", id.ToString());
-            lock(_databaseLock)
+            lock (_databaseLock)
             {
                 cmd.ExecuteNonQuery();
             }
@@ -78,7 +77,7 @@ namespace TourPlanner.Server.DAL
         {
             using var cmd = new NpgsqlCommand(GetAllToursQuery, _connection);
             var result = new List<Tour>();
-            lock(_databaseLock)
+            lock (_databaseLock)
             {
                 var reader = cmd.ExecuteReader();
                 while (reader.Read())
@@ -128,7 +127,7 @@ namespace TourPlanner.Server.DAL
             using var cmd = new NpgsqlCommand(GetTourByIdQuery, _connection);
             cmd.Parameters.AddWithValue("id", id.ToString());
             Tour? result = null;
-            lock(_databaseLock)
+            lock (_databaseLock)
             {
                 var reader = cmd.ExecuteReader();
                 while (reader.Read())

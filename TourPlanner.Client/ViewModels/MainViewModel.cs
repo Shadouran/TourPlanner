@@ -110,7 +110,7 @@ namespace TourPlanner.Client.ViewModels
                 var result = NavigationService?.NavigateTo(viewModel);
                 if (result == true)
                 {
-                    //_logManager.AddTourLogAsync(TourListViewModel.SelectedItem.Id, TourLogsListViewModel.AddedTourLog);
+                    _logManager.AddTourLogAsync(TourListViewModel.SelectedItem.Id, TourLogsListViewModel.AddedTourLog);
                     TourLogsListViewModel.Items.Add(TourLogsListViewModel.AddedTourLog);
                     TourListViewModel.SelectedItem.Logs.Add(TourLogsListViewModel.AddedTourLog);
                 }
@@ -122,7 +122,7 @@ namespace TourPlanner.Client.ViewModels
                 var result = NavigationService?.NavigateTo(viewModel);
                 if (result == true)
                 {
-                    //_logManager.EditTourLogAsync(TourListViewModel.SelectedItem.Id, TourLogsListViewModel.SelectedItem);
+                    _logManager.EditTourLogAsync(TourLogsListViewModel.SelectedItem);
                     LoadTour(TourListViewModel.SelectedItem);
                 }
             }, _ => TourListViewModel.SelectedItem != null && TourLogsListViewModel.SelectedItem != null);
@@ -151,20 +151,28 @@ namespace TourPlanner.Client.ViewModels
             {
                 tours = await _tourManager.GetMatchingToursAsync(searchText);
             }
+
+            foreach(var tour in tours)
+            {
+                var logs = await _logManager.GetAllTourLogsAsync(tour.Id);
+                tour.Logs = logs?.ToList();
+            }
+          
             TourListViewModel.SetItems(tours);
         }
 
         private async void LoadTour(Tour? tour)
         {
             TourDescriptionViewModel.LoadItem(tour);
-            if(tour != null)
+            if(tour == null)
             {
-                var imageUri = await _tourManager.GetImageAsync(tour.ImageFileName);
-                MapImageViewModel.LoadImage(imageUri);
-                TourLogsListViewModel.LoadLogs(tour.Logs);
+                MapImageViewModel.LoadImage(null);
+                TourLogsListViewModel.LoadLogs(null);
                 return;
             }
-            MapImageViewModel.LoadImage(null);
+            var imageUri = await _tourManager.GetImageAsync(tour.ImageFileName);
+            MapImageViewModel.LoadImage(imageUri);
+            TourLogsListViewModel.LoadLogs(tour.Logs);
         }
 
         public bool OnClosing()

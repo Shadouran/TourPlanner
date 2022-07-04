@@ -11,6 +11,7 @@ namespace TourPlanner.Client.DAL
     {
         Task AddTourLogAsync(Guid tourId, TourLog? log);
         Task DeleteTourLogAsync(Guid? id);
-        Task EditTourLogAsync(Guid tourId, TourLog? log);
+        Task EditTourLogAsync(TourLog? log);
+        Task<IEnumerable<TourLog>> GetAllTourLogsAsync(Guid tourId);
     }
 }
