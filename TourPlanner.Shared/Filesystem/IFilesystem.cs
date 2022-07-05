@@ -18,5 +18,6 @@ namespace TourPlanner.Shared.Filesystem
         void DeleteImage(Guid id);
         Tour ImportTour(string filename);
         Task ExportTourAsync(Tour tour, string filename);
+        void SaveReport(byte[] report, string filename, DocumentType type);
     }
 }
