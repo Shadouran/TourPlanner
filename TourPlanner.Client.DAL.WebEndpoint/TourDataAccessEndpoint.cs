@@ -11,7 +11,7 @@ using TourPlanner.Shared.Models;
 
 namespace TourPlanner.Client.DAL.Endpoint
 {
-    public class TourDataAccessEndpoint : ITourDataAccess
+    public class TourDataAccessEndpoint : ITourDataAccess, ILogDataAccess
     {
         private readonly HttpClient _httpClient;
         private readonly ILogger _logger;
@@ -130,6 +130,55 @@ namespace TourPlanner.Client.DAL.Endpoint
             {
                 _logger.Error(e.Message);
             }
+        }
+
+        public async Task AddTourLogAsync(Guid tourId, TourLog? log)
+        {
+            try
+            {
+                await _httpClient.PostAsJsonAsync($"/tours/logs/{tourId}", log);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e.Message);
+            }
+        }
+
+        public async Task EditTourLogAsync(TourLog? log)
+        {
+            try
+            {
+                await _httpClient.PutAsJsonAsync($"/tours/logs/", log);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e.Message);
+            }
+        }
+
+        public async Task DeleteTourLogAsync(Guid? id)
+        {
+            try
+            {
+                await _httpClient.DeleteAsync($"/tours/logs/{id}");
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e.Message);
+            }
+        }
+
+        public async Task<IEnumerable<TourLog>?> GetAllTourLogsAsync(Guid tourId)
+        {
+            try
+            {
+                return await _httpClient.GetFromJsonAsync<IEnumerable<TourLog>>($"/tours/logs/{tourId}");
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e.Message);
+            }
+            return null;
         }
     }
 }

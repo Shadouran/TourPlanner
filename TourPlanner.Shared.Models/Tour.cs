@@ -18,6 +18,7 @@ namespace TourPlanner.Shared.Models
         public float Distance { get; set; }
         public int EstimatedTime { get; set; }
         public Guid ImageFileName { get; set; }
+        public List<TourLog> Logs { get; set; } = new();
 
         public Tour()
         {

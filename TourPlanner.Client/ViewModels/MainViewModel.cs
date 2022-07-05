@@ -13,22 +13,30 @@ namespace TourPlanner.Client.ViewModels
     internal class MainViewModel : BaseViewModel, ICloseWindow
     {
         private readonly ITourManager _tourManager;
+        private readonly ILogManager _logManager;
         public TourListViewModel TourListViewModel { get; }
         public TourDescriptionViewModel TourDescriptionViewModel { get; }
         public MapImageViewModel MapImageViewModel { get; }
+        public TourLogsListViewModel TourLogsListViewModel { get; }
         public ICommand ImportCommand { get; set; }
         public ICommand ExportCommand { get; set; }
         public ICommand CloseCommand { get; set; }
         public ICommand OpenAddTourDialogCommand { get; set; }
         public ICommand OpenEditTourDialogCommand { get; set; }
+        public ICommand OpenAddTourLogDialogCommand { get; set; }
+        public ICommand OpenEditTourLogDialogCommand { get; set; }
+        public ICommand DeleteLogCommand { get; set; }
         public Action? Close { get; set; }
 
-        public MainViewModel(ITourManager tourManager, TourListViewModel tourListViewModel, TourDescriptionViewModel tourDescriptionViewModel, MapImageViewModel mapImageViewModel)
+        public MainViewModel(ITourManager tourManager, ILogManager logManager,
+            TourListViewModel tourListViewModel, TourDescriptionViewModel tourDescriptionViewModel, MapImageViewModel mapImageViewModel, TourLogsListViewModel tourLogsListViewModel)
         {
             _tourManager = tourManager;
+            _logManager = logManager;
             TourListViewModel = tourListViewModel;
             TourDescriptionViewModel = tourDescriptionViewModel;
             MapImageViewModel = mapImageViewModel;
+            TourLogsListViewModel = tourLogsListViewModel;
             SearchTours(null);
 
             ImportCommand = new RelayCommand(_ =>
@@ -78,8 +86,6 @@ namespace TourPlanner.Client.ViewModels
                 var result = NavigationService?.NavigateTo(viewModel);
                 if(result == true)
                 {
-                    // TODO FUCKING RELOAD IS GARBAGE PROB NOT GONNA HAPPEN
-                    LoadTour(null);
                     LoadTour(await _tourManager.EditTourAsync(TourListViewModel.SelectedItem));
                 }
             }, _ => TourListViewModel.SelectedItem != null);
@@ -97,6 +103,41 @@ namespace TourPlanner.Client.ViewModels
 
             TourListViewModel.OpenAddTourDialogCommand = OpenAddTourDialogCommand;
             TourListViewModel.OpenEditTourDialogCommand = OpenEditTourDialogCommand;
+
+            OpenAddTourLogDialogCommand = new RelayCommand(_ =>
+            {
+                var viewModel = new AddTourLogDialogViewModel(TourLogsListViewModel);
+                var result = NavigationService?.NavigateTo(viewModel);
+                if (result == true)
+                {
+                    _logManager.AddTourLogAsync(TourListViewModel.SelectedItem.Id, TourLogsListViewModel.AddedTourLog);
+                    TourLogsListViewModel.Items.Add(TourLogsListViewModel.AddedTourLog);
+                    TourListViewModel.SelectedItem.Logs.Add(TourLogsListViewModel.AddedTourLog);
+                }
+            }, _ => TourListViewModel.SelectedItem != null);
+
+            OpenEditTourLogDialogCommand = new RelayCommand(_ =>
+            {
+                var viewModel = new EditTourLogDialogViewModel(TourLogsListViewModel.SelectedItem);
+                var result = NavigationService?.NavigateTo(viewModel);
+                if (result == true)
+                {
+                    _logManager.EditTourLogAsync(TourLogsListViewModel.SelectedItem);
+                    LoadTour(TourListViewModel.SelectedItem);
+                }
+            }, _ => TourListViewModel.SelectedItem != null && TourLogsListViewModel.SelectedItem != null);
+
+            DeleteLogCommand = new RelayCommand(async _ =>
+            {
+                await _logManager.DeleteTourLogAsync(TourLogsListViewModel.SelectedItem.Id);
+                TourListViewModel.SelectedItem.Logs.Remove(TourLogsListViewModel.SelectedItem);
+                TourLogsListViewModel.Items.Remove(TourLogsListViewModel.SelectedItem);
+                TourLogsListViewModel.SelectedItem = null;
+            }, _ => TourLogsListViewModel.SelectedItem != null);
+
+            TourLogsListViewModel.OpenAddTourLogDialogCommand = OpenAddTourLogDialogCommand;
+            TourLogsListViewModel.OpenEditTourLogDialogCommand = OpenEditTourLogDialogCommand;
+            TourLogsListViewModel.DeleteItemCommand = DeleteLogCommand;
         }
 
         private async void SearchTours(string? searchText)
@@ -110,19 +151,28 @@ namespace TourPlanner.Client.ViewModels
             {
                 tours = await _tourManager.GetMatchingToursAsync(searchText);
             }
+
+            foreach(var tour in tours)
+            {
+                var logs = await _logManager.GetAllTourLogsAsync(tour.Id);
+                tour.Logs = logs?.ToList();
+            }
+          
             TourListViewModel.SetItems(tours);
         }
 
         private async void LoadTour(Tour? tour)
         {
             TourDescriptionViewModel.LoadItem(tour);
-            if(tour != null)
+            if(tour == null)
             {
-                var imageUri = await _tourManager.GetImageAsync(tour.ImageFileName);
-                MapImageViewModel.LoadImage(imageUri);
+                MapImageViewModel.LoadImage(null);
+                TourLogsListViewModel.LoadLogs(null);
                 return;
             }
-            MapImageViewModel.LoadImage(null);
+            var imageUri = await _tourManager.GetImageAsync(tour.ImageFileName);
+            MapImageViewModel.LoadImage(imageUri);
+            TourLogsListViewModel.LoadLogs(tour.Logs);
         }
 
         public bool OnClosing()

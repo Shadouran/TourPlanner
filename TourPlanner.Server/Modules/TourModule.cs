@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TourPlanner.Server.DAL;
 using TourPlanner.Server.DAL.Records;
+using TourPlanner.Server.DAL.Repositories;
 using TourPlanner.Server.MapQuest;
 using TourPlanner.Shared.Filesystem;
 using TourPlanner.Shared.Log4Net;
@@ -30,12 +31,6 @@ namespace TourPlanner.Server.Modules
                 var tours = await tourRepository.GetAllAsync();
                 return Results.Ok(tours);
             });
-
-            //endpoints.MapGet("/tours", async([FromServices] ITourRepository tourRepository, [FromQuery]string searchText) =>
-            //{
-            //    var tours = await tourRepository.GetMatchingAsync(searchText);
-            //    return Results.Ok(tours);
-            //});
 
             endpoints.MapGet("/tours/{id}", async ([FromServices] ITourRepository tourRepository, Guid id) =>
             {
