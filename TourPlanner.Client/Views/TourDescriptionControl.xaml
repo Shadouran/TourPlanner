@@ -11,10 +11,12 @@
     <Grid>
         <Grid.Resources>
             <Style TargetType="Label">
-                <Setter Property="Margin" Value="10"></Setter>
+                <Setter Property="VerticalAlignment" Value="Center"></Setter>
+                <!--<Setter Property="Margin" Value="10"></Setter>-->
             </Style>
             <Style TargetType="TextBlock">
-                <Setter Property="Margin" Value="5"></Setter>
+                <Setter Property="VerticalAlignment" Value="Center"></Setter>
+                <!--<Setter Property="Margin" Value="5"></Setter>-->
             </Style>
         </Grid.Resources>
         <Grid.ColumnDefinitions>
@@ -24,13 +26,13 @@
             <ColumnDefinition Width="Auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" MinHeight="70"></RowDefinition>
-            <RowDefinition Height="Auto" MinHeight="70"></RowDefinition>
-            <RowDefinition Height="Auto" MinHeight="70"></RowDefinition>
-            <RowDefinition Height="Auto" MinHeight="70"></RowDefinition>
-            <RowDefinition Height="Auto" MinHeight="70"></RowDefinition>
-            <RowDefinition Height="Auto" MinHeight="70"></RowDefinition>
-            <RowDefinition Height="Auto" MinHeight="70"></RowDefinition>
+            <RowDefinition Height="*" MinHeight="40"></RowDefinition>
+            <RowDefinition Height="*" MinHeight="40"></RowDefinition>
+            <RowDefinition Height="*" MinHeight="40"></RowDefinition>
+            <RowDefinition Height="*" MinHeight="40"></RowDefinition>
+            <RowDefinition Height="*" MinHeight="40"></RowDefinition>
+            <RowDefinition Height="*" MinHeight="40"></RowDefinition>
+            <RowDefinition Height="*" MinHeight="40"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <Label Grid.Row="0" Grid.Column="0">Name: </Label>
