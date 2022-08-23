@@ -17,8 +17,8 @@
                 <MenuItem Header="_Import..." Command="{Binding ImportCommand}"></MenuItem>
                 <MenuItem Header="_Export..." Command="{Binding ExportCommand}"></MenuItem>
                 <Separator></Separator>
-                <MenuItem Header="Generate _Tour Report" Command="{Binding GenerateTourReportCommand}"></MenuItem>
-                <MenuItem Header="Generate _Summary Report" Command="{Binding GenerateSummaryReportCommand}"></MenuItem>
+                <MenuItem Header="Generate _Tour Report..." Command="{Binding GenerateTourReportCommand}"></MenuItem>
+                <MenuItem Header="Generate _Summary Report..." Command="{Binding GenerateSummaryReportCommand}"></MenuItem>
                 <Separator></Separator>
                 <MenuItem Header="E_xit" Command="{Binding CloseCommand}"></MenuItem>
             </MenuItem>

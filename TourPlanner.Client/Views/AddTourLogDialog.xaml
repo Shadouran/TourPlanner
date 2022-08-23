@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TourPlanner.Client.Views"
         xmlns:viewmodels="clr-namespace:TourPlanner.Client.ViewModels"
+        xmlns:validationrules="clr-namespace:TourPlanner.Client.ValidationRules"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=viewmodels:AddTourLogDialogViewModel}"
         Title="AddTourLogDialog" Height="450" Width="800" Loaded="Window_Loaded">
@@ -29,20 +30,36 @@
         <DatePicker Grid.Column="1" Grid.Row="0" Margin="5" SelectedDate="{Binding Date}"></DatePicker>
 
         <Label Grid.Column="0" Grid.Row="1" Margin="5">Time:</Label>
-        <TextBox Grid.Column="1" Grid.Row="1" Margin="5" Text="{Binding Time, ValidatesOnDataErrors=True}"></TextBox>
+        <TextBox Name="Time" Grid.Column="1" Grid.Row="1" Margin="5">
+            <TextBox.Text>
+                <Binding Path="Time">
+                    <Binding.ValidationRules>
+                        <validationrules:TimeValidationRule ValidatesOnTargetUpdated="True"></validationrules:TimeValidationRule>
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
 
         <Label Grid.Column="0" Grid.Row="2" Margin="5">Total Time:</Label>
-        <TextBox Grid.Column="1" Grid.Row="2" Margin="5" Text="{Binding TotalTime, ValidatesOnDataErrors=True}"></TextBox>
+        <TextBox Name="TotalTime" Grid.Column="1" Grid.Row="2" Margin="5">
+            <TextBox.Text>
+                <Binding Path="TotalTime">
+                    <Binding.ValidationRules>
+                        <validationrules:TimeValidationRule ValidatesOnTargetUpdated="True"></validationrules:TimeValidationRule>
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
 
         <Label Grid.Column="0" Grid.Row="3" Margin="5">Difficulty:</Label>
-        <ComboBox Grid.Column="1" Grid.Row="3" Margin="5" Text="{Binding Difficulty}">
+        <ComboBox Name="Difficulty" Grid.Column="1" Grid.Row="3" Margin="5" Text="{Binding Difficulty}">
             <ComboBoxItem>Easy</ComboBoxItem>
             <ComboBoxItem>Medium</ComboBoxItem>
             <ComboBoxItem>Hard</ComboBoxItem>
         </ComboBox>
 
         <Label Grid.Column="0" Grid.Row="4" Margin="5">Rating:</Label>
-        <ComboBox Grid.Column="1" Grid.Row="4" Margin="5" Text="{Binding Rating}">
+        <ComboBox Name="Rating" Grid.Column="1" Grid.Row="4" Margin="5" Text="{Binding Rating}">
             <ComboBoxItem>1</ComboBoxItem>
             <ComboBoxItem>2</ComboBoxItem>
             <ComboBoxItem>3</ComboBoxItem>
@@ -54,7 +71,11 @@
         <TextBox Grid.Column="3" Grid.Row="0" Grid.RowSpan="5" TextWrapping="WrapWithOverflow" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" Margin="5" Text="{Binding Comment, ValidatesOnDataErrors=True}"></TextBox>
 
         <StackPanel Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5">
-            <Button Name="okButton" IsDefault="True" Width="75" Height="20" Margin="3" Command="{Binding AddTourLogCommand}" Click="OkButton_Click">Ok</Button>
+            <Button Name="okButton" Content="Ok" IsDefault="True" Width="75" Height="20" Margin="3" Command="{Binding AddTourLogCommand}" Click="OkButton_Click">
+                <Button.IsEnabled>
+                    <Binding ElementName="Time" Path="(Validation.HasError)"></Binding>
+                </Button.IsEnabled>
+            </Button>
             <Button Name="cancelButton" IsCancel="True" Width="75" Height="20" Margin="3">Cancel</Button>
         </StackPanel>
     </Grid>

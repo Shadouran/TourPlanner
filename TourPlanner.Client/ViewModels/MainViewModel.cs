@@ -186,7 +186,8 @@ namespace TourPlanner.Client.ViewModels
             {
                 tours = await _tourManager.GetMatchingToursAsync(searchText);
             }
-
+            if (tours == null)
+                return;
             foreach(var tour in tours)
             {
                 var logs = await _logManager.GetAllTourLogsAsync(tour.Id);
