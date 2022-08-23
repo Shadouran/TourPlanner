@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using System.Windows.Input;
 using TourPlanner.Shared.Models;
 
@@ -8,10 +9,28 @@ namespace TourPlanner.Client.ViewModels
     {
         private readonly TourLogsListViewModel _tourLogsListViewModel;
         public DateTime Date { get; set; } = DateTime.Today;
-        public string Time { get; set; } = DateTime.Now.ToString("HH:mm");
-        public string TotalTime { get; set; } = new DateTime(1, 1, 1, 0, 0, 0).ToString("HH:mm");
+        private string _time = DateTime.Now.ToString("HH:mm");
+        public string Time
+        {
+            get => _time;
+            set
+            {
+                _time = value;
+                OnPropertyChanged();
+            }
+        }
+        private string _totalTime = new DateTime(1, 1, 1, 0, 0, 0).ToString("HH:mm");
+        public string TotalTime
+        {
+            get => _totalTime;
+            set
+            {
+                _totalTime = value;
+                OnPropertyChanged();
+            }
+        }
         public Difficulty Difficulty { get; set; }
-        public int Rating { get; set; }
+        public Rating Rating { get; set; }
         public string Comment { get; set; }
 
         public ICommand AddTourLogCommand { get; set; }
@@ -23,18 +42,16 @@ namespace TourPlanner.Client.ViewModels
 
             AddTourLogCommand = new RelayCommand(_ =>
             {
-                if(ValidateAll())
-                {
-                    tourLogsListViewModel.AddedTourLog = new(null, Date, Time, Difficulty, TotalTime, Comment, Rating);
-                    Close?.Invoke();
-                }
-            });
+                tourLogsListViewModel.AddedTourLog = new(null, Date, Time, Difficulty, TotalTime, Comment, (int)Rating);
+                Close?.Invoke();
+            }, _ => ValidateAll());
         }
 
         private bool ValidateAll()
         {
-            // TODO missing validation
-            return true;
+            const string pattern = @"^\d{2,}:[0-5][0-9]$";
+            Regex regex = new(pattern);
+            return regex.IsMatch(Time) && regex.IsMatch(TotalTime);
         }
 
         public bool OnClosing()

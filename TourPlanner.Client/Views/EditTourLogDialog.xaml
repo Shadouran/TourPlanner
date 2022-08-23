@@ -29,25 +29,25 @@
         <DatePicker Grid.Column="1" Grid.Row="0" Margin="5" SelectedDate="{Binding Date}"></DatePicker>
 
         <Label Grid.Column="0" Grid.Row="1" Margin="5">Time:</Label>
-        <TextBox Grid.Column="1" Grid.Row="1" Margin="5" Text="{Binding Time, ValidatesOnDataErrors=True}"></TextBox>
+        <TextBox Grid.Column="1" Grid.Row="1" Margin="5" Text="{Binding Time, UpdateSourceTrigger=PropertyChanged}"></TextBox>
 
         <Label Grid.Column="0" Grid.Row="2" Margin="5">Total Time:</Label>
-        <TextBox Grid.Column="1" Grid.Row="2" Margin="5" Text="{Binding TotalTime, ValidatesOnDataErrors=True}"></TextBox>
+        <TextBox Grid.Column="1" Grid.Row="2" Margin="5" Text="{Binding TotalTime, UpdateSourceTrigger=PropertyChanged}"></TextBox>
 
         <Label Grid.Column="0" Grid.Row="3" Margin="5">Difficulty:</Label>
-        <ComboBox Grid.Column="1" Grid.Row="3" Margin="5" Text="{Binding Difficulty}">
+        <ComboBox Grid.Column="1" Grid.Row="3" Margin="5" SelectedIndex="0" Text="{Binding Difficulty}">
             <ComboBoxItem>Easy</ComboBoxItem>
             <ComboBoxItem>Medium</ComboBoxItem>
             <ComboBoxItem>Hard</ComboBoxItem>
         </ComboBox>
 
         <Label Grid.Column="0" Grid.Row="4" Margin="5">Rating:</Label>
-        <ComboBox Grid.Column="1" Grid.Row="4" Margin="5" Text="{Binding Rating}">
-            <ComboBoxItem>1</ComboBoxItem>
-            <ComboBoxItem>2</ComboBoxItem>
-            <ComboBoxItem>3</ComboBoxItem>
-            <ComboBoxItem>4</ComboBoxItem>
-            <ComboBoxItem>5</ComboBoxItem>
+        <ComboBox Grid.Column="1" Grid.Row="4" Margin="5" SelectedIndex="0" Text="{Binding Rating}">
+            <ComboBoxItem>One</ComboBoxItem>
+            <ComboBoxItem>Two</ComboBoxItem>
+            <ComboBoxItem>Three</ComboBoxItem>
+            <ComboBoxItem>Four</ComboBoxItem>
+            <ComboBoxItem>Five</ComboBoxItem>
         </ComboBox>
 
         <Label Grid.Column="2" Grid.Row="0" Margin="5">Comment:</Label>

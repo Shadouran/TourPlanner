@@ -33,4 +33,13 @@ namespace TourPlanner.Shared.Models
         Medium,
         Hard
     }
+
+    public enum Rating
+    {
+        One,
+        Two,
+        Three,
+        Four,
+        Five
+    }
 }

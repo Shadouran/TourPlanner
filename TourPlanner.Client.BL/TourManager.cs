@@ -59,6 +59,8 @@ namespace TourPlanner.Client.BL
             if(!_filesystem.ImageInCache(imageId))
             {
                 var image = await _tourDataAccess.GetImageAsync(imageId);
+                if(image == null)
+                    return null;
                 cacheImageId = _filesystem.SaveImage(image, imageId);
             }
             else

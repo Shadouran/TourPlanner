@@ -30,41 +30,25 @@
         <DatePicker Grid.Column="1" Grid.Row="0" Margin="5" SelectedDate="{Binding Date}"></DatePicker>
 
         <Label Grid.Column="0" Grid.Row="1" Margin="5">Time:</Label>
-        <TextBox Name="Time" Grid.Column="1" Grid.Row="1" Margin="5">
-            <TextBox.Text>
-                <Binding Path="Time">
-                    <Binding.ValidationRules>
-                        <validationrules:TimeValidationRule ValidatesOnTargetUpdated="True"></validationrules:TimeValidationRule>
-                    </Binding.ValidationRules>
-                </Binding>
-            </TextBox.Text>
-        </TextBox>
+        <TextBox Name="Time" Grid.Column="1" Grid.Row="1" Margin="5" Text="{Binding Time, UpdateSourceTrigger=PropertyChanged}"/>
 
         <Label Grid.Column="0" Grid.Row="2" Margin="5">Total Time:</Label>
-        <TextBox Name="TotalTime" Grid.Column="1" Grid.Row="2" Margin="5">
-            <TextBox.Text>
-                <Binding Path="TotalTime">
-                    <Binding.ValidationRules>
-                        <validationrules:TimeValidationRule ValidatesOnTargetUpdated="True"></validationrules:TimeValidationRule>
-                    </Binding.ValidationRules>
-                </Binding>
-            </TextBox.Text>
-        </TextBox>
+        <TextBox Name="TotalTime" Grid.Column="1" Grid.Row="2" Margin="5" Text="{Binding TotalTime, UpdateSourceTrigger=PropertyChanged}"/>
 
         <Label Grid.Column="0" Grid.Row="3" Margin="5">Difficulty:</Label>
-        <ComboBox Name="Difficulty" Grid.Column="1" Grid.Row="3" Margin="5" Text="{Binding Difficulty}">
+        <ComboBox Name="Difficulty" Grid.Column="1" Grid.Row="3" Margin="5" SelectedIndex="0" Text="{Binding Difficulty}">
             <ComboBoxItem>Easy</ComboBoxItem>
             <ComboBoxItem>Medium</ComboBoxItem>
             <ComboBoxItem>Hard</ComboBoxItem>
         </ComboBox>
 
         <Label Grid.Column="0" Grid.Row="4" Margin="5">Rating:</Label>
-        <ComboBox Name="Rating" Grid.Column="1" Grid.Row="4" Margin="5" Text="{Binding Rating}">
-            <ComboBoxItem>1</ComboBoxItem>
-            <ComboBoxItem>2</ComboBoxItem>
-            <ComboBoxItem>3</ComboBoxItem>
-            <ComboBoxItem>4</ComboBoxItem>
-            <ComboBoxItem>5</ComboBoxItem>
+        <ComboBox Name="Rating" Grid.Column="1" Grid.Row="4" Margin="5" SelectedIndex="0" Text="{Binding Rating}">
+            <ComboBoxItem>One</ComboBoxItem>
+            <ComboBoxItem>Two</ComboBoxItem>
+            <ComboBoxItem>Three</ComboBoxItem>
+            <ComboBoxItem>Four</ComboBoxItem>
+            <ComboBoxItem>Five</ComboBoxItem>
         </ComboBox>
 
         <Label Grid.Column="2" Grid.Row="0" Margin="5">Comment:</Label>
@@ -72,9 +56,6 @@
 
         <StackPanel Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5">
             <Button Name="okButton" Content="Ok" IsDefault="True" Width="75" Height="20" Margin="3" Command="{Binding AddTourLogCommand}" Click="OkButton_Click">
-                <Button.IsEnabled>
-                    <Binding ElementName="Time" Path="(Validation.HasError)"></Binding>
-                </Button.IsEnabled>
             </Button>
             <Button Name="cancelButton" IsCancel="True" Width="75" Height="20" Margin="3">Cancel</Button>
         </StackPanel>
