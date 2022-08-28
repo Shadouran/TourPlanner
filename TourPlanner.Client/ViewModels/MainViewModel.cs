@@ -8,6 +8,7 @@ using System.Windows.Input;
 using TourPlanner.Client.BL;
 using TourPlanner.Client.BL.ReportGeneration;
 using TourPlanner.Shared.Models;
+using static TourPlanner.Shared.Delegates;
 
 namespace TourPlanner.Client.ViewModels
 {
@@ -31,6 +32,7 @@ namespace TourPlanner.Client.ViewModels
         public ICommand OpenEditTourLogDialogCommand { get; set; }
         public ICommand DeleteLogCommand { get; set; }
         public Action? Close { get; set; }
+        public AddCreatedTourToListDelegate Handler { get; set; }
 
         public MainViewModel(ITourManager tourManager, ILogManager logManager, IReportGeneratorFactory reportGeneratorFactory,
             TourListViewModel tourListViewModel, TourDescriptionViewModel tourDescriptionViewModel, MapImageViewModel mapImageViewModel, TourLogsListViewModel tourLogsListViewModel)
@@ -109,6 +111,8 @@ namespace TourPlanner.Client.ViewModels
             {
                 Close?.Invoke();
             });
+
+            Handler = () => SearchTours(null);
 
             OpenAddTourDialogCommand = new RelayCommand(_ =>
             {

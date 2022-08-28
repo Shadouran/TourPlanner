@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using TourPlanner.Client.DAL;
 using TourPlanner.Shared.Filesystem;
 using TourPlanner.Shared.Models;
+using static TourPlanner.Shared.Delegates;
 
 namespace TourPlanner.Client.BL
 {
@@ -26,10 +27,10 @@ namespace TourPlanner.Client.BL
             _filesystem = filesystem;
         }
 
-        public async Task AddTourAsync(TourUserInformation tour)
+        public async Task AddTourAsync(TourUserInformation tour, AddCreatedTourToListDelegate handler)
         {
             tour.Id = Guid.NewGuid();
-            await _tourDataAccess.AddTourAsync(tour);
+            await _tourDataAccess.AddTourAsync(tour, handler);
         }
 
         public async Task DeleteTourAsync(Guid? id)

@@ -8,13 +8,13 @@ using System.Windows.Input;
 using TourPlanner.Client.BL;
 using System.Windows;
 using TourPlanner.Shared.Models;
+using static TourPlanner.Shared.Delegates;
 
 namespace TourPlanner.Client.ViewModels
 {
     internal class AddTourDialogViewModel : BaseViewModel, IDataErrorInfo, ICloseWindow
     {
         private readonly ITourManager _tourManager;
-        private readonly TourListViewModel _tourListViewModel;
 
         private string? _name;
         public string? Name
@@ -85,10 +85,9 @@ namespace TourPlanner.Client.ViewModels
         public ICommand CloseCommand { get; set; }
         public Action? Close { get; set; }
 
-        public AddTourDialogViewModel(ITourManager tourManager, TourListViewModel tourListViewModel)
+        public AddTourDialogViewModel(ITourManager tourManager, MainViewModel mainViewModel)
         {
             _tourManager = tourManager;
-            _tourListViewModel = tourListViewModel;
 
             CloseCommand = new RelayCommand(_ =>
             {
@@ -100,10 +99,11 @@ namespace TourPlanner.Client.ViewModels
                 if (ValidateAll())
                 {
                     var tour = new TourUserInformation(null, Name, Description, StartLocation, TargetLocation, TransportType, RouteInformation);
-                    _tourManager.AddTourAsync(tour);
+                    _tourManager.AddTourAsync(tour, mainViewModel.Handler);
                     Close?.Invoke();
                 }
             });
+
         }
 
         private bool ValidateAll()

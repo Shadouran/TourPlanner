@@ -5,12 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TourPlanner.Shared.Models;
+using static TourPlanner.Shared.Delegates;
 
 namespace TourPlanner.Client.BL
 {
     public interface ITourManager
     {
-        Task AddTourAsync(TourUserInformation tour);
+        Task AddTourAsync(TourUserInformation tour, AddCreatedTourToListDelegate handler);
         Task<Tour?> EditTourAsync(Tour tour);
         Task DeleteTourAsync(Guid? id);
         Task<IEnumerable<Tour>?> GetAllToursAsync();

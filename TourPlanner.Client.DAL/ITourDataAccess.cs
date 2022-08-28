@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TourPlanner.Shared.Models;
+using static TourPlanner.Shared.Delegates;
 
 namespace TourPlanner.Client.DAL
 {
     public interface ITourDataAccess
     {
-        Task AddTourAsync(TourUserInformation tour);
+        Task AddTourAsync(TourUserInformation tour, AddCreatedTourToListDelegate handler);
         Task DeleteTourAsync(Guid? id);
         Task<Tour?> EditTourAsync(Tour tour);
         Task<ICollection<Tour>?> GetAllToursAsync();

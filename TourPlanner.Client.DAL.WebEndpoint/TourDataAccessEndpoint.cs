@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TourPlanner.Shared.Logging;
 using TourPlanner.Shared.Models;
+using static TourPlanner.Shared.Delegates;
 
 namespace TourPlanner.Client.DAL.Endpoint
 {
@@ -24,13 +25,14 @@ namespace TourPlanner.Client.DAL.Endpoint
             };
             _logger = factory.CreateLogger<TourDataAccessEndpoint>();
         }
-        public async Task AddTourAsync(TourUserInformation tour)
+        public async Task AddTourAsync(TourUserInformation tour, AddCreatedTourToListDelegate handler)
         {
             try
             {
                 await _httpClient.PostAsJsonAsync("/tours", tour);
+                handler.Invoke();
             }
-            catch (HttpRequestException e)
+            catch (Exception e)
             {
                 _logger.Error(e.Message);
             }
@@ -53,6 +55,7 @@ namespace TourPlanner.Client.DAL.Endpoint
             try
             {
                 var response = await _httpClient.PutAsJsonAsync($"/tours", tour);
+                response.EnsureSuccessStatusCode();
                 var stringContent = await response.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<Tour>(stringContent);
             }
