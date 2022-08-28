@@ -11,6 +11,6 @@ namespace TourPlanner.Server.DAL
     {
         NpgsqlConnection Connection {get;}
 
-        object DatabaseLock { get; }
+        Semaphore DatabaseLock { get; }
     }
 }

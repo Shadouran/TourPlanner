@@ -10,8 +10,8 @@ namespace TourPlanner.Server.DAL
 {
     public class NpgsqlDatabase : INpgsqlDatabase
     {
-        private readonly object _databaseLock = new();
-        public object DatabaseLock { get => _databaseLock;  }
+        private readonly Semaphore _databaseLock = new(1,1);
+        public Semaphore DatabaseLock { get => _databaseLock;  }
 
         private readonly NpgsqlConnection _connection;
         public NpgsqlConnection Connection { get => _connection;  }

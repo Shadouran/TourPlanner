@@ -13,7 +13,7 @@ namespace TourPlanner.Server.DAL.Repositories
         private const string UpdateTourQuery = "UPDATE tours SET name=@name, description=@description, startlocation=@startlocation, targetlocation=@targetlocation, transporttype=@transporttype, distance=@distance, estimatedtime=@estimatedtime, routeinformation=@routeinformation, imagefilename=@imagefilename WHERE id=@id";
 
         private readonly NpgsqlConnection _connection;
-        private readonly object _databaseLock;
+        private readonly Semaphore _databaseLock;
         public TourRepositoryPostgreSQL(INpgsqlDatabase database)
         {
             _connection = database.Connection;
@@ -34,10 +34,9 @@ namespace TourPlanner.Server.DAL.Repositories
             cmd.Parameters.AddWithValue("estimatedtime", tour.EstimatedTime);
             cmd.Parameters.AddWithValue("routeinformation", tour.RouteInformation);
             cmd.Parameters.AddWithValue("imagefilename", tour.ImageFileName);
-            lock (_databaseLock)
-            {
-                cmd.ExecuteNonQuery();
-            }
+            _databaseLock.WaitOne();
+            cmd.ExecuteNonQuery();
+            _databaseLock.Release();
         }
 
         public async Task CreateAsync(Tour tour)
@@ -53,49 +52,51 @@ namespace TourPlanner.Server.DAL.Repositories
             cmd.Parameters.AddWithValue("estimatedtime", tour.EstimatedTime);
             cmd.Parameters.AddWithValue("routeinformation", tour.RouteInformation);
             cmd.Parameters.AddWithValue("imagefilename", tour.ImageFileName);
+            _databaseLock.WaitOne();
             await cmd.ExecuteNonQueryAsync();
+            _databaseLock.Release();
         }
 
         public void Delete(Guid id)
         {
             using var cmd = new NpgsqlCommand(DeleteTourQuery, _connection);
             cmd.Parameters.AddWithValue("id", id.ToString());
-            lock (_databaseLock)
-            {
-                cmd.ExecuteNonQuery();
-            }
+            _databaseLock.WaitOne();
+            cmd.ExecuteNonQuery();
+            _databaseLock.Release();
         }
 
         public async Task DeleteAsync(Guid id)
         {
             using var cmd = new NpgsqlCommand(DeleteTourQuery, _connection);
             cmd.Parameters.AddWithValue("id", id.ToString());
+            _databaseLock.WaitOne();
             await cmd.ExecuteNonQueryAsync();
+            _databaseLock.Release();
         }
 
         public IEnumerable<Tour> GetAll()
         {
             using var cmd = new NpgsqlCommand(GetAllToursQuery, _connection);
             var result = new List<Tour>();
-            lock (_databaseLock)
+            _databaseLock.WaitOne();
+            var reader = cmd.ExecuteReader();
+            while (reader.Read())
             {
-                var reader = cmd.ExecuteReader();
-                while (reader.Read())
-                {
-                    var tour = new Tour(Guid.Parse(reader.GetString(reader.GetOrdinal("id"))),
-                                            reader.GetString(reader.GetOrdinal("name")),
-                                            reader.GetString(reader.GetOrdinal("description")),
-                                            reader.GetString(reader.GetOrdinal("startlocation")),
-                                            reader.GetString(reader.GetOrdinal("targetlocation")),
-                                            reader.GetString(reader.GetOrdinal("transporttype")),
-                                            reader.GetString(reader.GetOrdinal("routeinformation")),
-                                            reader.GetFloat(reader.GetOrdinal("distance")),
-                                            reader.GetInt32(reader.GetOrdinal("estimatedtime")),
-                                            Guid.Parse(reader.GetString(reader.GetOrdinal("imagefilename"))));
-                    result.Add(tour);
-                }
-                reader.Close();
+                var tour = new Tour(Guid.Parse(reader.GetString(reader.GetOrdinal("id"))),
+                                        reader.GetString(reader.GetOrdinal("name")),
+                                        reader.GetString(reader.GetOrdinal("description")),
+                                        reader.GetString(reader.GetOrdinal("startlocation")),
+                                        reader.GetString(reader.GetOrdinal("targetlocation")),
+                                        reader.GetString(reader.GetOrdinal("transporttype")),
+                                        reader.GetString(reader.GetOrdinal("routeinformation")),
+                                        reader.GetFloat(reader.GetOrdinal("distance")),
+                                        reader.GetInt32(reader.GetOrdinal("estimatedtime")),
+                                        Guid.Parse(reader.GetString(reader.GetOrdinal("imagefilename"))));
+                result.Add(tour);
             }
+            reader.Close();
+            _databaseLock.Release();
             return result;
         }
 
@@ -103,6 +104,7 @@ namespace TourPlanner.Server.DAL.Repositories
         {
             using var cmd = new NpgsqlCommand(GetAllToursQuery, _connection);
             var result = new List<Tour>();
+            _databaseLock.WaitOne();
             var reader = await cmd.ExecuteReaderAsync();
             while (await reader.ReadAsync())
             {
@@ -119,6 +121,7 @@ namespace TourPlanner.Server.DAL.Repositories
                 result.Add(tour);
             }
             await reader.CloseAsync();
+            _databaseLock.Release();
             return result;
         }
 
@@ -127,24 +130,23 @@ namespace TourPlanner.Server.DAL.Repositories
             using var cmd = new NpgsqlCommand(GetTourByIdQuery, _connection);
             cmd.Parameters.AddWithValue("id", id.ToString());
             Tour? result = null;
-            lock (_databaseLock)
+            _databaseLock.WaitOne();
+            var reader = cmd.ExecuteReader();
+            while (reader.Read())
             {
-                var reader = cmd.ExecuteReader();
-                while (reader.Read())
-                {
-                    result = new Tour(Guid.Parse(reader.GetString(reader.GetOrdinal("id"))),
-                                            reader.GetString(reader.GetOrdinal("name")),
-                                            reader.GetString(reader.GetOrdinal("description")),
-                                            reader.GetString(reader.GetOrdinal("startlocation")),
-                                            reader.GetString(reader.GetOrdinal("targetlocation")),
-                                            reader.GetString(reader.GetOrdinal("transporttype")),
-                                            reader.GetString(reader.GetOrdinal("routeinformation")),
-                                            reader.GetFloat(reader.GetOrdinal("distance")),
-                                            reader.GetInt32(reader.GetOrdinal("estimatedtime")),
-                                            Guid.Parse(reader.GetString(reader.GetOrdinal("imagefilename"))));
-                }
-                reader.Close();
+                result = new Tour(Guid.Parse(reader.GetString(reader.GetOrdinal("id"))),
+                                        reader.GetString(reader.GetOrdinal("name")),
+                                        reader.GetString(reader.GetOrdinal("description")),
+                                        reader.GetString(reader.GetOrdinal("startlocation")),
+                                        reader.GetString(reader.GetOrdinal("targetlocation")),
+                                        reader.GetString(reader.GetOrdinal("transporttype")),
+                                        reader.GetString(reader.GetOrdinal("routeinformation")),
+                                        reader.GetFloat(reader.GetOrdinal("distance")),
+                                        reader.GetInt32(reader.GetOrdinal("estimatedtime")),
+                                        Guid.Parse(reader.GetString(reader.GetOrdinal("imagefilename"))));
             }
+            reader.Close();
+            _databaseLock.Release();
             return result;
         }
 
@@ -153,6 +155,7 @@ namespace TourPlanner.Server.DAL.Repositories
             using var cmd = new NpgsqlCommand(GetTourByIdQuery, _connection);
             Tour? result = null;
             cmd.Parameters.AddWithValue("id", id.ToString());
+            _databaseLock.WaitOne();
             var reader = await cmd.ExecuteReaderAsync();
             while (await reader.ReadAsync())
             {
@@ -168,6 +171,7 @@ namespace TourPlanner.Server.DAL.Repositories
                                             Guid.Parse(reader.GetString(reader.GetOrdinal("imagefilename"))));
             }
             await reader.CloseAsync();
+            _databaseLock.Release();
             return result;
         }
 
@@ -189,10 +193,9 @@ namespace TourPlanner.Server.DAL.Repositories
             cmd.Parameters.AddWithValue("estimatedtime", tour.EstimatedTime);
             cmd.Parameters.AddWithValue("routeinformation", tour.RouteInformation);
             cmd.Parameters.AddWithValue("imagefilename", tour.ImageFileName);
-            lock (_databaseLock)
-            {
-                cmd.ExecuteNonQuery();
-            }
+            _databaseLock.WaitOne();
+            cmd.ExecuteNonQuery();
+            _databaseLock.Release();
         }
 
         public async Task UpdateAsync(Tour tour)
@@ -208,13 +211,17 @@ namespace TourPlanner.Server.DAL.Repositories
             cmd.Parameters.AddWithValue("estimatedtime", tour.EstimatedTime);
             cmd.Parameters.AddWithValue("routeinformation", tour.RouteInformation);
             cmd.Parameters.AddWithValue("imagefilename", tour.ImageFileName);
+            _databaseLock.WaitOne();
             await cmd.ExecuteNonQueryAsync();
+            _databaseLock.Release();
         }
 
         private void EnsureTables()
         {
             using var cmd = new NpgsqlCommand(CreateTablesQuery, _connection);
+            _databaseLock.WaitOne();
             cmd.ExecuteNonQuery();
+            _databaseLock.Release();
         }
     }
 }

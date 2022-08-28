@@ -19,7 +19,7 @@ namespace TourPlanner.Server.DAL.Repositories
         private const string DeleteLogQuery = "DELETE FROM logs WHERE id=@id";
 
         private readonly NpgsqlConnection _connection;
-        private readonly object _databaseLock;
+        private readonly Semaphore _databaseLock;
         public LogRepositoryPostgreSQL(INpgsqlDatabase database)
         {
             _connection = database.Connection;
@@ -32,6 +32,7 @@ namespace TourPlanner.Server.DAL.Repositories
             using var cmd = new NpgsqlCommand(GetAllLogsQuery, _connection);
             cmd.Parameters.AddWithValue("tourId", tourId.ToString());
             var result = new List<TourLog>();
+            _databaseLock.WaitOne();
             var reader = await cmd.ExecuteReaderAsync();
             while (await reader.ReadAsync())
             {
@@ -45,6 +46,7 @@ namespace TourPlanner.Server.DAL.Repositories
                 result.Add(tour);
             }
             await reader.CloseAsync();
+            _databaseLock.Release();
             return result;
         }
 
@@ -59,7 +61,9 @@ namespace TourPlanner.Server.DAL.Repositories
             cmd.Parameters.AddWithValue("difficulty", log.Difficulty.ToString());
             cmd.Parameters.AddWithValue("rating", log.Rating);
             cmd.Parameters.AddWithValue("comment", log.Comment);
+            _databaseLock.WaitOne();
             await cmd.ExecuteNonQueryAsync();
+            _databaseLock.Release();
         }
 
         public async Task UpdateAsync(TourLog log)
@@ -72,20 +76,26 @@ namespace TourPlanner.Server.DAL.Repositories
             cmd.Parameters.AddWithValue("difficulty", log.Difficulty.ToString());
             cmd.Parameters.AddWithValue("rating", log.Rating);
             cmd.Parameters.AddWithValue("comment", log.Comment);
+            _databaseLock.WaitOne();
             await cmd.ExecuteNonQueryAsync();
+            _databaseLock.Release();
         }
 
         public async Task DeleteAsync(Guid id)
         {
             using var cmd = new NpgsqlCommand(DeleteLogQuery, _connection);
             cmd.Parameters.AddWithValue("id", id.ToString());
+            _databaseLock.WaitOne();
             await cmd.ExecuteNonQueryAsync();
+            _databaseLock.Release();
         }
 
         private void EnsureTables()
         {
             using var cmd = new NpgsqlCommand(CreateTablesQuery, _connection);
+            _databaseLock.WaitOne();
             cmd.ExecuteNonQuery();
+            _databaseLock.Release();
         }
     }
 }
