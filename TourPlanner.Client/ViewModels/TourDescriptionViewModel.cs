@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TourPlanner.Shared;
 using TourPlanner.Shared.Models;
 
 namespace TourPlanner.Client.ViewModels
@@ -96,6 +97,27 @@ namespace TourPlanner.Client.ViewModels
             }
         }
 
+        private string? _popularity;
+        public string? Popularity
+        {
+            get => _popularity;
+            set
+            {
+                _popularity = value;
+                OnPropertyChanged();
+            }
+        }
+        private string? _childFriendliness;
+        public string? ChildFriendliness
+        {
+            get => _childFriendliness;
+            set
+            {
+                _childFriendliness = value;
+                OnPropertyChanged();
+            }
+        }
+
         public TourDescriptionViewModel()
         {
 
@@ -124,6 +146,9 @@ namespace TourPlanner.Client.ViewModels
             RouteInformation = tour.RouteInformation;
             Distance = tour.Distance;
             EstimatedTime = tour.EstimatedTime;
+
+            Popularity = Functions.CalculatePopularity(tour.Logs.Count);
+            ChildFriendliness = Functions.CalculateChildFriendliness(tour);
         }
     }
 }

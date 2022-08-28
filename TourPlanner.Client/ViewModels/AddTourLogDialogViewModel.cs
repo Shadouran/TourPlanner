@@ -42,6 +42,8 @@ namespace TourPlanner.Client.ViewModels
 
             AddTourLogCommand = new RelayCommand(_ =>
             {
+                if (Comment == null)
+                    Comment = "";
                 tourLogsListViewModel.AddedTourLog = new(null, Date, Time, Difficulty, TotalTime, Comment, (int)Rating);
                 Close?.Invoke();
             }, _ => ValidateAll());
@@ -49,7 +51,7 @@ namespace TourPlanner.Client.ViewModels
 
         private bool ValidateAll()
         {
-            const string pattern = @"^\d{2,}:[0-5][0-9]$";
+            const string pattern = @"^([1-9]+\d*:)?(2[0-3]|[01][0-9]):([0-5][0-9])$";
             Regex regex = new(pattern);
             return regex.IsMatch(Time) && regex.IsMatch(TotalTime);
         }

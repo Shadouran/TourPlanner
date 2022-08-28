@@ -36,6 +36,7 @@ namespace TourPlanner.Shared.Models
 
     public enum Rating
     {
+        None,
         One,
         Two,
         Three,

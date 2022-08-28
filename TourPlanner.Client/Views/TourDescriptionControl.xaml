@@ -21,13 +21,11 @@
         </Grid.Resources>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="Auto"></ColumnDefinition>
-            <ColumnDefinition Width="Auto"></ColumnDefinition>
-            <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" MinHeight="40"></RowDefinition>
-            <RowDefinition Height="*" MinHeight="40"></RowDefinition>
             <RowDefinition Height="*" MinHeight="40"></RowDefinition>
             <RowDefinition Height="*" MinHeight="40"></RowDefinition>
             <RowDefinition Height="*" MinHeight="40"></RowDefinition>
@@ -47,9 +45,13 @@
         <TextBlock Name="estimatedTime" Grid.Row="4" Grid.Column="1" Text="{Binding EstimatedTime}"></TextBlock>
         <Label Grid.Row="5" Grid.Column="0">Transport Type: </Label>
         <TextBlock Name="transportType" Grid.Row="5" Grid.Column="1" Text="{Binding TransportType}"></TextBlock>
-        <Label Grid.Row="6" Grid.Column="0">Description: </Label>
-        <TextBlock Name="description" Grid.Row="6" Grid.Column="1" Text="{Binding Description}" TextWrapping="WrapWithOverflow"></TextBlock>
-        <Label Grid.Row="7" Grid.Column="0">Route Information: </Label>
-        <TextBlock Name="routeInformation" Grid.Row="7" Grid.Column="1" Text="{Binding RouteInformation}" TextWrapping="WrapWithOverflow"></TextBlock>
+        <Label Grid.Row="0" Grid.Column="2">Popularity:</Label>
+        <TextBlock Name="popularity" Grid.Row="0" Grid.Column="3" Text="{Binding Popularity}"></TextBlock>
+        <Label Grid.Row="1" Grid.Column="2">Child friendly:</Label>
+        <TextBlock Name="childFriendliness" Grid.Row="1" Grid.Column="3" Text="{Binding ChildFriendliness}"></TextBlock>
+        <Label Grid.Row="2" Grid.Column="2">Route Information: </Label>
+        <TextBlock Name="routeInformation" Grid.Row="2" Grid.Column="3" Text="{Binding RouteInformation}" TextWrapping="WrapWithOverflow"></TextBlock>
+        <Label Grid.Row="3" Grid.Column="2">Description: </Label>
+        <TextBlock Name="description" Grid.Row="3" Grid.Column="3" Text="{Binding Description}" TextWrapping="WrapWithOverflow"></TextBlock>
     </Grid>
 </UserControl>
