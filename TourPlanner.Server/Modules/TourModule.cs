@@ -56,7 +56,7 @@ namespace TourPlanner.Server.Modules
                 var uri = uriBuilder.Build();
 
                 var info = await mapApi.GetDirections(uri);
-                float Distance = info.Distance;
+                float Distance = (float)Math.Round(info.Distance * 1.609344f, 2);
                 int EstimatedTime = info.EstimatedTime;
 
                 uriBuilder = new MapQuestUriBuilder(apiKey);
