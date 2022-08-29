@@ -9,7 +9,7 @@ namespace TourPlanner.Server.MapQuest
 {
     public interface IMapAPI
     {
-        Task<MapDirections?> GetDirections(string uri);
+        Task<MapDirections> GetDirections(string uri);
         Task<byte[]?> GetMapImage(string uri);
     }
 }

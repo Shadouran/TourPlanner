@@ -51,9 +51,7 @@ namespace TourPlanner.Client.ViewModels
 
         private bool ValidateAll()
         {
-            const string pattern = @"^([1-9]+\d*:)?(2[0-3]|[01][0-9]):([0-5][0-9])$";
-            Regex regex = new(pattern);
-            return regex.IsMatch(Time) && regex.IsMatch(TotalTime);
+            return Utility.ValidateTime(Time) && Utility.ValidateTime(TotalTime);
         }
 
         public bool OnClosing()

@@ -147,8 +147,8 @@ namespace TourPlanner.Client.ViewModels
             Distance = tour.Distance;
             EstimatedTime = tour.EstimatedTime;
 
-            Popularity = Functions.CalculatePopularity(tour.Logs.Count);
-            ChildFriendliness = Functions.CalculateChildFriendliness(tour);
+            Popularity = Utility.CalculatePopularity(tour.Logs.Count);
+            ChildFriendliness = Utility.CalculateChildFriendliness(tour);
         }
     }
 }

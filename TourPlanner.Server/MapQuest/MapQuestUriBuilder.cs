@@ -8,7 +8,7 @@ using TourPlanner.Shared.Models;
 
 namespace TourPlanner.Server.MapQuest
 {
-    internal class MapQuestUriBuilder
+    public class MapQuestUriBuilder
     {
         private readonly StringBuilder _stringBuilder;
         private readonly CultureInfo _cultureInfo;

@@ -25,26 +25,31 @@ namespace TourPlanner.Server.MapQuest
             _logger = loggerFactory.CreateLogger<MapQuestAPI>();
         }
 
-        public async Task<MapDirections?> GetDirections(string uri)
+        public async Task<MapDirections> GetDirections(string uri)
         {
             try
             {
                 var response = await _directionApi.GetStringAsync(uri);
                 dynamic? deserialized = JsonConvert.DeserializeObject(response);
-                var ci = new CultureInfo("en-US");
-                float ullat = float.Parse(deserialized?.route.boundingBox.ul.lat.ToString(ci), ci);
-                float ullng = float.Parse(deserialized?.route.boundingBox.ul.lng.ToString(ci), ci);
-                float lrlat = float.Parse(deserialized?.route.boundingBox.lr.lat.ToString(ci), ci);
-                float lrlng = float.Parse(deserialized?.route.boundingBox.lr.lng.ToString(ci), ci);
-                float distance = float.Parse(deserialized?.route.distance.ToString(ci), ci);
-                int time = int.Parse(deserialized?.route.time.ToString());
-                return new(distance, time, new(ullat, ullng), new(lrlat, lrlng));
+                return ParseDirections(deserialized);
             }
             catch (Exception e)
             {
                 _logger.Error(e.Message);
             }
-            return null;
+            return new(0.0f, 0, new(0.0f, 0.0f), new(0.0f, 0.0f));
+        }
+
+        private static MapDirections ParseDirections(dynamic deserialized)
+        {
+            var ci = new CultureInfo("en-US");
+            float ullat = float.Parse(deserialized?.route.boundingBox.ul.lat.ToString(ci), ci);
+            float ullng = float.Parse(deserialized?.route.boundingBox.ul.lng.ToString(ci), ci);
+            float lrlat = float.Parse(deserialized?.route.boundingBox.lr.lat.ToString(ci), ci);
+            float lrlng = float.Parse(deserialized?.route.boundingBox.lr.lng.ToString(ci), ci);
+            float distance = float.Parse(deserialized?.route.distance.ToString(ci), ci);
+            int time = int.Parse(deserialized?.route.time.ToString());
+            return new(distance, time, new(ullat, ullng), new(lrlat, lrlng));
         }
 
         public async Task<byte[]?> GetMapImage(string uri)
