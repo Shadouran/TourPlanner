@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace TourPlanner.Shared.Models
 {
-    public enum DocumentType
+    public enum FileExtension
     {
+        CSV,
         PDF
     }
 }

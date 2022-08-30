@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using TourPlanner.Client.BL;
 using TourPlanner.Client.BL.ReportGeneration;
+using TourPlanner.Client.ExportImport;
 using TourPlanner.Shared.Models;
 using static TourPlanner.Shared.Delegates;
 
@@ -17,6 +15,7 @@ namespace TourPlanner.Client.ViewModels
         private readonly ITourManager _tourManager;
         private readonly ILogManager _logManager;
         private readonly IReportGenerator _reportGenerator;
+        private readonly IFilenameFetch _filenameFetch;
         public TourListViewModel TourListViewModel { get; }
         public TourDescriptionViewModel TourDescriptionViewModel { get; }
         public MapImageViewModel MapImageViewModel { get; }
@@ -34,12 +33,13 @@ namespace TourPlanner.Client.ViewModels
         public Action? Close { get; set; }
         public AddCreatedTourToListDelegate Handler { get; set; }
 
-        public MainViewModel(ITourManager tourManager, ILogManager logManager, IReportGeneratorFactory reportGeneratorFactory,
+        public MainViewModel(ITourManager tourManager, ILogManager logManager, IReportGeneratorFactory reportGeneratorFactory, IFilenameFetch filenameFetch,
             TourListViewModel tourListViewModel, TourDescriptionViewModel tourDescriptionViewModel, MapImageViewModel mapImageViewModel, TourLogsListViewModel tourLogsListViewModel)
         {
             _tourManager = tourManager;
             _logManager = logManager;
             _reportGenerator = reportGeneratorFactory.CreateReportGenerator();
+            _filenameFetch = filenameFetch;
             TourListViewModel = tourListViewModel;
             TourDescriptionViewModel = tourDescriptionViewModel;
             MapImageViewModel = mapImageViewModel;
@@ -48,63 +48,34 @@ namespace TourPlanner.Client.ViewModels
 
             ImportCommand = new RelayCommand(_ =>
             {
-                // TODO getout
-                var dialog = new Microsoft.Win32.OpenFileDialog
-                {
-                    FileName = "Documents",
-                    DefaultExt = ".csv",
-                    Filter = "CSV Files (.csv)|*.csv"
-                };
-                if (dialog.ShowDialog() == true)
-                {
-                    var filename = dialog.FileName;
-                    _tourManager.ImportTourAsync(filename);
-                }
+                var filename = _filenameFetch.FetchFilename("Document", FileExtension.CSV);
+                if (filename == null || TourListViewModel.SelectedItem == null)
+                    return;
+                _tourManager.ImportTourAsync(filename);
             });
 
             ExportCommand = new RelayCommand(_ =>
             {
-                var dialog = new Microsoft.Win32.SaveFileDialog
-                {
-                    FileName = "Documents",
-                    DefaultExt = ".csv",
-                    Filter = "CSV Files (.csv)|*.csv"
-                };
-                if(dialog.ShowDialog() == true)
-                {
-                    string filename = dialog.FileName;
-                    _tourManager.ExportTourAsync(TourListViewModel.SelectedItem, filename);
-                }
+                var filename = _filenameFetch.FetchFilename("Document", FileExtension.CSV);
+                if (filename == null || TourListViewModel.SelectedItem == null)
+                    return;
+               _tourManager.ExportTourAsync(TourListViewModel.SelectedItem, filename);
             }, _ => TourListViewModel.SelectedItem != null);
 
             GenerateTourReportCommand = new RelayCommand(_ =>
             {
-                var dialog = new Microsoft.Win32.SaveFileDialog
-                {
-                    FileName = "Documents",
-                    DefaultExt = ".pdf",
-                    Filter = "PDF Files (.pdf)|*.pdf"
-                };
-                if (dialog.ShowDialog() == true)
-                {
-                    string filename = dialog.FileName;
-                    _reportGenerator.GenerateTourReport(TourListViewModel.SelectedItem, filename);
-                }
+                var filename = _filenameFetch.FetchFilename("Document", FileExtension.PDF);
+                if (filename == null || TourListViewModel.SelectedItem == null)
+                    return;
+                _reportGenerator.GenerateTourReport(TourListViewModel.SelectedItem, filename);
             }, _ => TourListViewModel.SelectedItem != null);
 
             GenerateSummaryReportCommand = new RelayCommand(_ =>
             {
-                var dialog = new Microsoft.Win32.SaveFileDialog
-                {
-                    FileName = "Documents",
-                    DefaultExt = ".pdf",
-                    Filter = "PDF Files (.pdf)|*.pdf"
-                };
-                if (dialog.ShowDialog() == true)
-                {
-                    string filename = dialog.FileName;
-                    _reportGenerator.GenerateSummaryReport(TourListViewModel.Items, filename);
-                }
+                var filename = _filenameFetch.FetchFilename("Document", FileExtension.PDF);
+                if (filename == null)
+                    return;
+                _reportGenerator.GenerateSummaryReport(TourListViewModel.Items, filename);
             }, _ => TourListViewModel.Items.Count > 0);
 
             CloseCommand = new RelayCommand(_ =>

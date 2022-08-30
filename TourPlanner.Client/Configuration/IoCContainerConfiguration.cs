@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TourPlanner.Client.BL;
 using TourPlanner.Client.BL.ReportGeneration;
 using TourPlanner.Client.DAL;
 using TourPlanner.Client.DAL.Endpoint;
+using TourPlanner.Client.ExportImport;
 using TourPlanner.Client.Navigation;
 using TourPlanner.Client.ViewModels;
 using TourPlanner.Client.Views;
@@ -51,6 +48,7 @@ namespace TourPlanner.Client.IoCConfiguration
             services.AddSingleton<IReportGeneratorFactory, QuestPdfGeneratorFactory>();
 
             // UI Setup
+            services.AddSingleton<IFilenameFetch, FilenameFetchDialog>();
             services.AddSingleton<INavigationService, NavigationService>(s =>
             {
                 var navigationService = new NavigationService(s);
@@ -91,5 +89,6 @@ namespace TourPlanner.Client.IoCConfiguration
         public EditTourDialogViewModel EditTourDialogViewModel => _serviceProvider.GetRequiredService<EditTourDialogViewModel>();
         public ILoggerFactory LoggerFactory => _serviceProvider.GetRequiredService<ILoggerFactory>();
         public INavigationService NavigationService => _serviceProvider.GetRequiredService<INavigationService>();
+        public IFilenameFetch FilenameFetch => _serviceProvider.GetRequiredService<IFilenameFetch>();
     }
 }
