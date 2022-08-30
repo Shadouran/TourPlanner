@@ -135,13 +135,13 @@ namespace TourPlanner.Shared.Filesystem
             });
         }
 
-        public async void SaveReport(byte[] report, string filename, DocumentType type)
+        public async void SaveReport(byte[] report, string filename, FileExtension extension)
         {
             await Task.Run(() =>
             {
-                switch(type)
+                switch(extension)
                 {
-                    case DocumentType.PDF:
+                    case FileExtension.PDF:
                         Path.ChangeExtension(filename, "pdf");
                         break;
                 }

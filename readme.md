@@ -32,7 +32,7 @@ should other client implementation be done.
 Logging is done via Log4Net since this is the library we used in class and implemented.
 For report generation I used QuestPDF. It is a rather small library and has extremely readable document generation code.
 It also has a preview done via an extern executable as well as a VSCode extension which allows for fast document designing.
-
+CvsHelper, chosen for its ease of use, is used in the Filesystem class for importing/exporting of tours in CVS format.
 Design patterns
 
 I used the Builder design on the server side in MapQuestUriBuilder:

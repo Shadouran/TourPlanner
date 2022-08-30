@@ -142,7 +142,7 @@ namespace TourPlanner.Client.BL.ReportGeneration
 
                 });
             var pdf = document.GeneratePdf();
-            _filesystem.SaveReport(pdf, filename, DocumentType.PDF);
+            _filesystem.SaveReport(pdf, filename, FileExtension.PDF);
         }
 
         public void GenerateSummaryReport(IEnumerable<Tour> tours, string filename)
@@ -219,7 +219,7 @@ namespace TourPlanner.Client.BL.ReportGeneration
                 });
             });
             var pdf = document.GeneratePdf();
-            _filesystem.SaveReport(pdf, filename, DocumentType.PDF);
+            _filesystem.SaveReport(pdf, filename, FileExtension.PDF);
         }
     }
 }
