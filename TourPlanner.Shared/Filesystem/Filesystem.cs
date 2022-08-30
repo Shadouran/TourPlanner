@@ -24,6 +24,21 @@ namespace TourPlanner.Shared.Filesystem
         {
             _logger = loggerFactory.CreateLogger<Filesystem>();
             _path = configuration["ImageDirectory"];
+            EnsureDirectory();
+        }
+
+        private void EnsureDirectory()
+        {
+            if (Directory.Exists(_path))
+                return;
+            try
+            {
+                Directory.CreateDirectory(_path);
+            }
+            catch (Exception e)
+            {
+                _logger.Fatal(e.Message);
+            }
         }
 
         public bool ImageInCache(Guid? id)
