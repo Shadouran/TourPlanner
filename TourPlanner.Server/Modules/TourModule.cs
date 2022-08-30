@@ -60,9 +60,9 @@ namespace TourPlanner.Server.Modules
                 int EstimatedTime = info.EstimatedTime;
 
                 uriBuilder = new MapQuestUriBuilder(apiKey);
-                uriBuilder.BoundingBox(info.UpperLeft, info.LowerRight);
-                uriBuilder.Route(tourUserInfo.StartLocation, tourUserInfo.TargetLocation);
-                uriBuilder.Size(800, 800);
+                uriBuilder.BoundingBox(info.UpperLeft, info.LowerRight)
+                          .Route(tourUserInfo.StartLocation, tourUserInfo.TargetLocation)
+                          .Size(800, 800);
                 uri = uriBuilder.Build();
 
                 var mapImageBytes = await mapApi.GetMapImage(uri);

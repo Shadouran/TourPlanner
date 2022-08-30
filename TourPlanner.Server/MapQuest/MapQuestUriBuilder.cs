@@ -21,23 +21,27 @@ namespace TourPlanner.Server.MapQuest
             _stringBuilder.Append(apiKey);
         }
 
-        public void BoundingBox(Coordinates upperLeft, Coordinates lowerRight)
+        public MapQuestUriBuilder BoundingBox(Coordinates upperLeft, Coordinates lowerRight)
         {
             _stringBuilder.Append($"&boundingBox={upperLeft.Latitude.ToString(_cultureInfo)},{upperLeft.Longitude.ToString(_cultureInfo)},{lowerRight.Latitude.ToString(_cultureInfo)},{lowerRight.Longitude.ToString(_cultureInfo)}");
+            return this;
         }
 
-        public void Direction(string from, string to)
+        public MapQuestUriBuilder Direction(string from, string to)
         {
             _stringBuilder.Append($"&from={from}&to={to}");
+            return this;
         }
-        public void Route(string start, string end)
+        public MapQuestUriBuilder Route(string start, string end)
         {
             _stringBuilder.Append($"&start={start}&end={end}");
+            return this;
         }
 
-        public void Size(int width, int height)
+        public MapQuestUriBuilder Size(int width, int height)
         {
             _stringBuilder.Append($"&size={width},{height}");
+            return this;
         }
 
         public string Build()
