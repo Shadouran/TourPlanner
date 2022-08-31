@@ -2,17 +2,18 @@
 
 The app uses a layer based client-server architecture.
 Projects realize each of the different layers:
-* Client contains the MVVM based GUI (view layer)
-* Client.BL contains the report generation as well as methods regarding tour and log management (business layer, logic)
-* Client.DAL defines the interfaces used for data access (data access layer interface)
-* Client.DAL.Endpoint is one possible implementation of Client.DAL, defines the server API endpoint access and takes care of the client-side file management (data access layer implementation)
-* Server contains the endpoints as well as various logic (server business layer)
-* Server.DAL has the database access, server-side filesystem management (server data access layer)
-* Shared contains classes used on both sides, like file management and logging
-* Shared contains the logging interface and manager as well as the filesystem definition and implementation used in the DALs
-* Shared.Log4Net is a logging implentation
-* Shared.Models defines models used throughout the program
-* Client.Test and Server.Test contain the tests for the respective projects
+
+- Client contains the MVVM based GUI (view layer)
+- Client.BL contains the report generation as well as methods regarding tour and log management (business layer, logic)
+- Client.DAL defines the interfaces used for data access (data access layer interface)
+- Client.DAL.Endpoint is one possible implementation of Client.DAL, defines the server API endpoint access and takes care of the client-side file management (data access layer implementation)
+- Server contains the endpoints as well as various logic (server business layer)
+- Server.DAL has the database access, server-side filesystem management (server data access layer)
+- Shared contains classes used on both sides, like file management and logging
+- Shared contains the logging interface and manager as well as the filesystem definition and implementation used in the DALs
+- Shared.Log4Net is a logging implentation
+- Shared.Models defines models used throughout the program
+- Client.Test and Server.Test contain the tests for the respective projects
 
 # UX
 
@@ -37,9 +38,13 @@ CvsHelper, chosen for its ease of use, is used in the Filesystem class for impor
 # Design patterns
 
 I used the Builder design on the server side in MapQuestUriBuilder:
-	The constructor takes the MapQuest API key and each method then adds specific parameters needed for the API call.
-	This allows for easy and readable URI generation.
+The constructor takes the MapQuest API key and each method then adds specific parameters needed for the API call.
+This allows for easy and readable URI generation.
 
 On the client side I implemented a factory for the report generation.
 Here only a factory for QuestPdfGenerator using QuestPDF is implemented but it can easily be extended with other libraries.
 The IReportGeneratorFactory creates a preconfigured instance of a class implementing IReportGenerator. QuestPDF does not need anything configurated so this was simply done for future-proofing.
+
+# Github
+
+[Github Repository](https://github.com/Shadouran/TourPlanner)
