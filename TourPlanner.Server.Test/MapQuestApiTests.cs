@@ -16,7 +16,7 @@ namespace TourPlanner.Server.Test
             //configMock.Setup(config => It.IsAny<IConfigurationSection>()["DirectionBaseAddress"]).Returns("http://www.mapquestapi.com/directions/v2/route");
             //configMock.Setup(config => It.IsAny<IConfigurationSection>()["StaticMapBaseAddress"]).Returns("http://www.mapquestapi.com/staticmap/v5/map");
             //var config = configMock.Object;
-            var config = new ConfigurationBuilder().AddJsonFile(@"C:\Repositories\TourPlanner\TourPlanner.Server\appsettings.json", false, true).Build();
+            var config = new ConfigurationBuilder().AddJsonFile("appsettings.json", false, true).Build();
 
             var loggerMock = new Mock<ILogger>();
             loggerMock.Setup(logger => logger.Error(It.IsAny<string>()));
@@ -54,7 +54,7 @@ namespace TourPlanner.Server.Test
             //configMock.Setup(config => It.IsAny<IConfigurationSection>()["DirectionBaseAddress"]).Returns("http://www.mapquestapi.com/directions/v2/route");
             //configMock.Setup(config => It.IsAny<IConfigurationSection>()["StaticMapBaseAddress"]).Returns("http://www.mapquestapi.com/staticmap/v5/map");
             //var config = configMock.Object;
-            var config = new ConfigurationBuilder().AddJsonFile(@"C:\Repositories\TourPlanner\TourPlanner.Server\appsettings.json", false, true).Build();
+            var config = new ConfigurationBuilder().AddJsonFile("appsettings.json", false, true).Build();
 
             var loggerMock = new Mock<ILogger>();
             loggerMock.Setup(logger => logger.Error(It.IsAny<string>()));
@@ -92,7 +92,7 @@ namespace TourPlanner.Server.Test
             //configMock.Setup(config => It.IsAny<IConfigurationSection>()["DirectionBaseAddress"]).Returns("http://www.mapquestapi.com/directions/v2/route");
             //configMock.Setup(config => It.IsAny<IConfigurationSection>()["StaticMapBaseAddress"]).Returns("http://www.mapquestapi.com/staticmap/v5/map");
             //var config = configMock.Object;
-            var config = new ConfigurationBuilder().AddJsonFile(@"C:\Repositories\TourPlanner\TourPlanner.Server\appsettings.json", false, true).Build();
+            var config = new ConfigurationBuilder().AddJsonFile("appsettings.json", false, true).Build();
 
             var loggerMock = new Mock<ILogger>();
             loggerMock.Setup(logger => logger.Error(It.IsAny<string>()));
