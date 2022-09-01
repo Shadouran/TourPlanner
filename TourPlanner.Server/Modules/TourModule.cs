@@ -52,7 +52,8 @@ namespace TourPlanner.Server.Modules
             {
                 var apiKey = configuration.GetRequiredSection("MapAPI")["Key"];
                 var uriBuilder = new MapQuestUriBuilder(apiKey);
-                uriBuilder.Direction(tourUserInfo.StartLocation, tourUserInfo.TargetLocation);
+                uriBuilder.Direction(tourUserInfo.StartLocation, tourUserInfo.TargetLocation)
+                          .RouteType(tourUserInfo.TransportType);
                 var uri = uriBuilder.Build();
 
                 var info = await mapApi.GetDirections(uri);
@@ -82,7 +83,8 @@ namespace TourPlanner.Server.Modules
             {
                 var apiKey = configuration.GetRequiredSection("MapAPI")["Key"];
                 var uriBuilder = new MapQuestUriBuilder(apiKey);
-                uriBuilder.Direction(tour.StartLocation, tour.TargetLocation);
+                uriBuilder.Direction(tour.StartLocation, tour.TargetLocation)
+                          .RouteType(tour.TransportType);
                 var uri = uriBuilder.Build();
 
                 var info = await mapApi.GetDirections(uri);
@@ -90,9 +92,10 @@ namespace TourPlanner.Server.Modules
                 int EstimatedTime = info.EstimatedTime;
 
                 uriBuilder = new MapQuestUriBuilder(apiKey);
-                uriBuilder.BoundingBox(info.UpperLeft, info.LowerRight);
-                uriBuilder.Route(tour.StartLocation, tour.TargetLocation);
-                uriBuilder.Size(800, 800);
+                uriBuilder.BoundingBox(info.UpperLeft, info.LowerRight)
+                          .Route(tour.StartLocation, tour.TargetLocation)
+                          .RouteType(tour.TransportType)
+                          .Size(800, 800);
                 uri = uriBuilder.Build();
 
                 filesystem.DeleteImage(tour.ImageFileName);

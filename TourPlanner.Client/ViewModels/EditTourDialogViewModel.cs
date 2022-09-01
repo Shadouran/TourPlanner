@@ -59,8 +59,8 @@ namespace TourPlanner.Client.ViewModels
             }
         }
 
-        private string? _transportType;
-        public string? TransportType
+        private TransportType _transportType;
+        public TransportType TransportType
         {
             get => _transportType;
             set
@@ -125,7 +125,6 @@ namespace TourPlanner.Client.ViewModels
                 string.IsNullOrEmpty(Description) ||
                 string.IsNullOrEmpty(StartLocation) ||
                 string.IsNullOrEmpty(TargetLocation) ||
-                string.IsNullOrEmpty(TransportType) ||
                 string.IsNullOrEmpty(RouteInformation))
             {
                 return false;
@@ -162,12 +161,6 @@ namespace TourPlanner.Client.ViewModels
                     break;
                 case "TargetLocation":
                     if (string.IsNullOrEmpty(TargetLocation))
-                    {
-                        validationMessage = "Field can not be empty.";
-                    }
-                    break;
-                case "TransportType":
-                    if (string.IsNullOrEmpty(TransportType))
                     {
                         validationMessage = "Field can not be empty.";
                     }

@@ -44,6 +44,12 @@ namespace TourPlanner.Server.MapQuest
             return this;
         }
 
+        public MapQuestUriBuilder RouteType(TransportType type)
+        {
+            _stringBuilder.Append($"&routeType={type.ToString().ToLower()}");
+            return this;
+        }
+
         public string Build()
         {
             return _stringBuilder.ToString();

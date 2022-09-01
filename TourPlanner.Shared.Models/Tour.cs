@@ -13,7 +13,7 @@ namespace TourPlanner.Shared.Models
         public string Description { get; set; }
         public string StartLocation { get; set; }
         public string TargetLocation { get; set; }
-        public string TransportType { get; set; }
+        public TransportType TransportType { get; set; }
         public string RouteInformation { get; set; }
         public float Distance { get; set; }
         public int EstimatedTime { get; set; }
@@ -24,7 +24,7 @@ namespace TourPlanner.Shared.Models
         {
 
         }
-        public Tour(Guid id, string name, string description, string startLocation, string targetLocation, string transportType, string routeInformation, float distance, int estimatedTime, Guid imageFileName)
+        public Tour(Guid id, string name, string description, string startLocation, string targetLocation, TransportType transportType, string routeInformation, float distance, int estimatedTime, Guid imageFileName)
         {
             Id = id;
             Name = name;
@@ -46,10 +46,10 @@ namespace TourPlanner.Shared.Models
         public string Description { get; set; }
         public string StartLocation { get; set; }
         public string TargetLocation { get; set; }
-        public string TransportType { get; set; }
+        public TransportType TransportType { get; set; }
         public string RouteInformation { get; set; }
 
-        public TourUserInformation(Guid? id, string name, string description, string startLocation, string targetLocation, string transportType, string routeInformation)
+        public TourUserInformation(Guid? id, string name, string description, string startLocation, string targetLocation, TransportType transportType, string routeInformation)
         {
             Id = id;
             Name = name;

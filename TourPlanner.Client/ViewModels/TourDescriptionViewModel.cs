@@ -142,7 +142,7 @@ namespace TourPlanner.Client.ViewModels
             Description = tour.Description;
             StartLocation = tour.StartLocation;
             TargetLocation = tour.TargetLocation;
-            TransportType = tour.TransportType;
+            TransportType = tour.TransportType.ToString();
             RouteInformation = tour.RouteInformation;
             Distance = Math.Round(tour.Distance, 2).ToString() + " km";
 

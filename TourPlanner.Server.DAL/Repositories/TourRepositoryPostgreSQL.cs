@@ -1,5 +1,6 @@
 ﻿using Npgsql;
 using TourPlanner.Server.DAL.Records;
+using Models = TourPlanner.Shared.Models;
 
 namespace TourPlanner.Server.DAL.Repositories
 {
@@ -29,7 +30,7 @@ namespace TourPlanner.Server.DAL.Repositories
             cmd.Parameters.AddWithValue("description", tour.Description);
             cmd.Parameters.AddWithValue("startlocation", tour.StartLocation);
             cmd.Parameters.AddWithValue("targetlocation", tour.TargetLocation);
-            cmd.Parameters.AddWithValue("transporttype", tour.TransportType);
+            cmd.Parameters.AddWithValue("transporttype", tour.TransportType.ToString());
             cmd.Parameters.AddWithValue("distance", tour.Distance);
             cmd.Parameters.AddWithValue("estimatedtime", tour.EstimatedTime);
             cmd.Parameters.AddWithValue("routeinformation", tour.RouteInformation);
@@ -47,7 +48,7 @@ namespace TourPlanner.Server.DAL.Repositories
             cmd.Parameters.AddWithValue("description", tour.Description);
             cmd.Parameters.AddWithValue("startlocation", tour.StartLocation);
             cmd.Parameters.AddWithValue("targetlocation", tour.TargetLocation);
-            cmd.Parameters.AddWithValue("transporttype", tour.TransportType);
+            cmd.Parameters.AddWithValue("transporttype", tour.TransportType.ToString());
             cmd.Parameters.AddWithValue("distance", tour.Distance);
             cmd.Parameters.AddWithValue("estimatedtime", tour.EstimatedTime);
             cmd.Parameters.AddWithValue("routeinformation", tour.RouteInformation);
@@ -88,7 +89,7 @@ namespace TourPlanner.Server.DAL.Repositories
                                         reader.GetString(reader.GetOrdinal("description")),
                                         reader.GetString(reader.GetOrdinal("startlocation")),
                                         reader.GetString(reader.GetOrdinal("targetlocation")),
-                                        reader.GetString(reader.GetOrdinal("transporttype")),
+                                        Enum.Parse<Models.TransportType>(reader.GetString(reader.GetOrdinal("transporttype"))),
                                         reader.GetString(reader.GetOrdinal("routeinformation")),
                                         reader.GetFloat(reader.GetOrdinal("distance")),
                                         reader.GetInt32(reader.GetOrdinal("estimatedtime")),
@@ -113,7 +114,7 @@ namespace TourPlanner.Server.DAL.Repositories
                                             reader.GetString(reader.GetOrdinal("description")),
                                             reader.GetString(reader.GetOrdinal("startlocation")),
                                             reader.GetString(reader.GetOrdinal("targetlocation")),
-                                            reader.GetString(reader.GetOrdinal("transporttype")),
+                                            Enum.Parse<Models.TransportType>(reader.GetString(reader.GetOrdinal("transporttype"))),
                                             reader.GetString(reader.GetOrdinal("routeinformation")),
                                             reader.GetFloat(reader.GetOrdinal("distance")),
                                             reader.GetInt32(reader.GetOrdinal("estimatedtime")),
@@ -139,7 +140,7 @@ namespace TourPlanner.Server.DAL.Repositories
                                         reader.GetString(reader.GetOrdinal("description")),
                                         reader.GetString(reader.GetOrdinal("startlocation")),
                                         reader.GetString(reader.GetOrdinal("targetlocation")),
-                                        reader.GetString(reader.GetOrdinal("transporttype")),
+                                        Enum.Parse<Models.TransportType>(reader.GetString(reader.GetOrdinal("transporttype"))),
                                         reader.GetString(reader.GetOrdinal("routeinformation")),
                                         reader.GetFloat(reader.GetOrdinal("distance")),
                                         reader.GetInt32(reader.GetOrdinal("estimatedtime")),
@@ -164,7 +165,7 @@ namespace TourPlanner.Server.DAL.Repositories
                                             reader.GetString(reader.GetOrdinal("description")),
                                             reader.GetString(reader.GetOrdinal("startlocation")),
                                             reader.GetString(reader.GetOrdinal("targetlocation")),
-                                            reader.GetString(reader.GetOrdinal("transporttype")),
+                                            Enum.Parse<Models.TransportType>(reader.GetString(reader.GetOrdinal("transporttype"))),
                                             reader.GetString(reader.GetOrdinal("routeinformation")),
                                             reader.GetFloat(reader.GetOrdinal("distance")),
                                             reader.GetInt32(reader.GetOrdinal("estimatedtime")),
@@ -188,7 +189,7 @@ namespace TourPlanner.Server.DAL.Repositories
             cmd.Parameters.AddWithValue("description", tour.Description);
             cmd.Parameters.AddWithValue("startlocation", tour.StartLocation);
             cmd.Parameters.AddWithValue("targetlocation", tour.TargetLocation);
-            cmd.Parameters.AddWithValue("transporttype", tour.TransportType);
+            cmd.Parameters.AddWithValue("transporttype", tour.TransportType.ToString());
             cmd.Parameters.AddWithValue("distance", tour.Distance);
             cmd.Parameters.AddWithValue("estimatedtime", tour.EstimatedTime);
             cmd.Parameters.AddWithValue("routeinformation", tour.RouteInformation);
@@ -206,7 +207,7 @@ namespace TourPlanner.Server.DAL.Repositories
             cmd.Parameters.AddWithValue("description", tour.Description);
             cmd.Parameters.AddWithValue("startlocation", tour.StartLocation);
             cmd.Parameters.AddWithValue("targetlocation", tour.TargetLocation);
-            cmd.Parameters.AddWithValue("transporttype", tour.TransportType);
+            cmd.Parameters.AddWithValue("transporttype", tour.TransportType.ToString());
             cmd.Parameters.AddWithValue("distance", tour.Distance);
             cmd.Parameters.AddWithValue("estimatedtime", tour.EstimatedTime);
             cmd.Parameters.AddWithValue("routeinformation", tour.RouteInformation);
