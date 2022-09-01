@@ -16,6 +16,7 @@ namespace TourPlanner.Client.ViewModels
         private readonly ILogManager _logManager;
         private readonly IReportGenerator _reportGenerator;
         private readonly IFilenameFetch _filenameFetch;
+        public TourUserInformation? NewTour { get; set; } 
         public TourListViewModel TourListViewModel { get; }
         public TourDescriptionViewModel TourDescriptionViewModel { get; }
         public MapImageViewModel MapImageViewModel { get; }
@@ -85,9 +86,14 @@ namespace TourPlanner.Client.ViewModels
 
             Handler = () => SearchTours(null);
 
-            OpenAddTourDialogCommand = new RelayCommand(_ =>
+            OpenAddTourDialogCommand = new RelayCommand(async _ =>
             {
-                NavigationService?.NavigateTo<AddTourDialogViewModel>();
+                var viewModel = new AddTourDialogViewModel(_tourManager, this);
+                var result = NavigationService?.NavigateTo(viewModel);
+                if (result == true && NewTour != null)
+                {
+                    AddTour(await _tourManager.AddTourAsync(NewTour));
+                }
             });
 
             OpenEditTourDialogCommand = new RelayCommand(async _ =>
@@ -184,6 +190,13 @@ namespace TourPlanner.Client.ViewModels
             var imageUri = await _tourManager.GetImageAsync(tour.ImageFileName);
             MapImageViewModel.LoadImage(imageUri);
             TourLogsListViewModel.LoadLogs(tour.Logs);
+        }
+
+        private void AddTour(Tour? tour)
+        {
+            if(tour != null)
+                TourListViewModel.Items.Add(tour);
+            LoadTour(tour);
         }
 
         public bool OnClosing()

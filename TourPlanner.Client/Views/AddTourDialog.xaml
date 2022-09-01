@@ -42,7 +42,7 @@
         <TextBox Name="routeInformationTextBox" Grid.Column="3" Grid.Row="2" TextWrapping="WrapWithOverflow" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" Margin="5" Text="{Binding RouteInformation, ValidatesOnDataErrors=True}"></TextBox>
 
         <StackPanel Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5">
-            <Button Name="okButton" IsDefault="True" Width="75" Height="20" Margin="3" Command="{Binding AddTourCommand}">Ok</Button>
+            <Button Name="okButton" IsDefault="True" Width="75" Height="20" Margin="3" Command="{Binding AddTourCommand}" Click="OkButton_Click">Ok</Button>
             <Button Name="cancelButton" IsCancel="True" Width="75" Height="20" Margin="3">Cancel</Button>
         </StackPanel>
     </Grid>

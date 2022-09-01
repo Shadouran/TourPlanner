@@ -25,17 +25,20 @@ namespace TourPlanner.Client.DAL.Endpoint
             };
             _logger = factory.CreateLogger<TourDataAccessEndpoint>();
         }
-        public async Task AddTourAsync(TourUserInformation tour, AddCreatedTourToListDelegate handler)
+        public async Task<Tour?> AddTourAsync(TourUserInformation tour)
         {
             try
             {
-                await _httpClient.PostAsJsonAsync("/tours", tour);
-                handler.Invoke();
+                var response = await _httpClient.PostAsJsonAsync("/tours", tour);
+                response.EnsureSuccessStatusCode();
+                var stringContent = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<Tour>(stringContent);
             }
             catch (Exception e)
             {
                 _logger.Error(e.Message);
             }
+            return null;
         }
 
         public async Task DeleteTourAsync(Guid? id)

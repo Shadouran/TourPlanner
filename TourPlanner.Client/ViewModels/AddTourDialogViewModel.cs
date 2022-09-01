@@ -98,8 +98,7 @@ namespace TourPlanner.Client.ViewModels
             {
                 if (ValidateAll())
                 {
-                    var tour = new TourUserInformation(null, Name, Description, StartLocation, TargetLocation, TransportType, RouteInformation);
-                    _tourManager.AddTourAsync(tour, mainViewModel.Handler);
+                    mainViewModel.NewTour = new TourUserInformation(null, Name, Description, StartLocation, TargetLocation, TransportType, RouteInformation);
                     Close?.Invoke();
                 }
             });

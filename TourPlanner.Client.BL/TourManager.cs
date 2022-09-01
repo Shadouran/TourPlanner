@@ -27,10 +27,10 @@ namespace TourPlanner.Client.BL
             _filesystem = filesystem;
         }
 
-        public async Task AddTourAsync(TourUserInformation tour, AddCreatedTourToListDelegate handler)
+        public async Task<Tour?> AddTourAsync(TourUserInformation tour)
         {
             tour.Id = Guid.NewGuid();
-            await _tourDataAccess.AddTourAsync(tour, handler);
+            return await _tourDataAccess.AddTourAsync(tour);
         }
 
         public async Task DeleteTourAsync(Guid? id)
