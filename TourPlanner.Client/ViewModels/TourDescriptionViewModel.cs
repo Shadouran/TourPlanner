@@ -75,8 +75,8 @@ namespace TourPlanner.Client.ViewModels
             }
         }
 
-        private float? _distance;
-        public float? Distance
+        private string? _distance;
+        public string? Distance
         {
             get => _distance;
             set
@@ -86,8 +86,8 @@ namespace TourPlanner.Client.ViewModels
             }
         }
 
-        private int? _estimatedTime;
-        public int? EstimatedTime
+        private string? _estimatedTime;
+        public string? EstimatedTime
         {
             get => _estimatedTime;
             set
@@ -144,8 +144,14 @@ namespace TourPlanner.Client.ViewModels
             TargetLocation = tour.TargetLocation;
             TransportType = tour.TransportType;
             RouteInformation = tour.RouteInformation;
-            Distance = tour.Distance;
-            EstimatedTime = tour.EstimatedTime;
+            Distance = Math.Round(tour.Distance, 2).ToString() + " km";
+
+            var duration = TimeSpan.FromSeconds(tour.EstimatedTime);
+            var builder = new StringBuilder();
+            if (duration.Days > 0)
+                builder.Append(duration.ToString("%d\\."));
+            builder.Append(duration.ToString("hh\\:mm"));
+            EstimatedTime = builder.ToString();
 
             Popularity = Utility.CalculatePopularity(tour.Logs.Count);
             ChildFriendliness = Utility.CalculateChildFriendliness(tour);
